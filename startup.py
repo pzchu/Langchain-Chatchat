@@ -171,7 +171,14 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
             sys.modules["fastchat.serve.vllm_worker"].logger.setLevel(log_level)
 
         else:
-            from fastchat.serve.model_worker import app, GptqConfig, AWQConfig, ModelWorker, worker_id
+            from fastchat.serve.model_worker import GptqConfig, AWQConfig, worker_id
+            if args.device in ['xpu']:
+                from bigdl.llm.serving.bigdl_llm_model import patch_fastchat
+                patch_fastchat()
+
+                from bigdl.llm.serving.model_worker import app, ModelWorker
+            else:
+                from fastchat.serve.model_worker import app, ModelWorker
 
             args.gpus = "0"  # GPU的编号,如果有多个GPU，可以设置为"0,1,2,3"
             args.max_gpu_memory = "22GiB"
@@ -214,29 +221,54 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
                 groupsize=args.awq_groupsize,
             )
 
-            worker = ModelWorker(
-                controller_addr=args.controller_address,
-                worker_addr=args.worker_address,
-                worker_id=worker_id,
-                model_path=args.model_path,
-                model_names=args.model_names,
-                limit_worker_concurrency=args.limit_worker_concurrency,
-                no_register=args.no_register,
-                device=args.device,
-                num_gpus=args.num_gpus,
-                max_gpu_memory=args.max_gpu_memory,
-                load_8bit=args.load_8bit,
-                cpu_offloading=args.cpu_offloading,
-                gptq_config=gptq_config,
-                awq_config=awq_config,
-                stream_interval=args.stream_interval,
-                conv_template=args.conv_template,
-                embed_in_truncate=args.embed_in_truncate,
-            )
-            sys.modules["fastchat.serve.model_worker"].args = args
-            sys.modules["fastchat.serve.model_worker"].gptq_config = gptq_config
-            # sys.modules["fastchat.serve.model_worker"].worker = worker
-            sys.modules["fastchat.serve.model_worker"].logger.setLevel(log_level)
+            if args.device in ['xpu']:
+                worker = ModelWorker(
+                    controller_addr=args.controller_address,
+                    worker_addr=args.worker_address,
+                    worker_id=worker_id,
+                    model_path=args.model_path,
+                    model_names=args.model_names,
+                    limit_worker_concurrency=args.limit_worker_concurrency,
+                    no_register=args.no_register,
+                    device=args.device,
+                    num_gpus=args.num_gpus,
+                    max_gpu_memory=args.max_gpu_memory,
+                    load_8bit=args.load_8bit,
+                    cpu_offloading=args.cpu_offloading,
+                    gptq_config=gptq_config,
+                    awq_config=awq_config,
+                    stream_interval=args.stream_interval,
+                    conv_template=args.conv_template,
+                    # embed_in_truncate=args.embed_in_truncate, # currently not supported in bigdl-llm's model worker
+                )
+                sys.modules["bigdl.llm.serving.model_worker"].args = args
+                sys.modules["bigdl.llm.serving.model_worker"].gptq_config = gptq_config
+                sys.modules["bigdl.llm.serving.model_worker"].worker = worker
+                sys.modules["bigdl.llm.serving.model_worker"].logger.setLevel(log_level)
+            else:
+                worker = ModelWorker(
+                    controller_addr=args.controller_address,
+                    worker_addr=args.worker_address,
+                    worker_id=worker_id,
+                    model_path=args.model_path,
+                    model_names=args.model_names,
+                    limit_worker_concurrency=args.limit_worker_concurrency,
+                    no_register=args.no_register,
+                    device=args.device,
+                    num_gpus=args.num_gpus,
+                    max_gpu_memory=args.max_gpu_memory,
+                    load_8bit=args.load_8bit,
+                    cpu_offloading=args.cpu_offloading,
+                    gptq_config=gptq_config,
+                    awq_config=awq_config,
+                    stream_interval=args.stream_interval,
+                    conv_template=args.conv_template,
+                    embed_in_truncate=args.embed_in_truncate,
+                )
+                sys.modules["fastchat.serve.model_worker"].args = args
+                sys.modules["fastchat.serve.model_worker"].gptq_config = gptq_config
+                # sys.modules["fastchat.serve.model_worker"].worker = worker
+                sys.modules["fastchat.serve.model_worker"].logger.setLevel(log_level)
 
     MakeFastAPIOffline(app)
     app.title = f"FastChat LLM Server ({args.model_names[0]})"
