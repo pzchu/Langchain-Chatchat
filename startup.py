@@ -243,7 +243,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
                 )
                 sys.modules["bigdl.llm.serving.model_worker"].args = args
                 sys.modules["bigdl.llm.serving.model_worker"].gptq_config = gptq_config
-                # sys.modules["bigdl.llm.serving.model_worker"].worker = worker
+                sys.modules["bigdl.llm.serving.model_worker"].worker = worker
                 sys.modules["bigdl.llm.serving.model_worker"].logger.setLevel(log_level)
             else:
                 worker = ModelWorker(

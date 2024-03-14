@@ -1,3 +1,4 @@
+import torch
 from langchain.embeddings.base import Embeddings
 from langchain.vectorstores.faiss import FAISS
 import threading
