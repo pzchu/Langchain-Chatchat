@@ -1,7 +1,7 @@
 import os
 
 # 默认使用的知识库
-DEFAULT_KNOWLEDGE_BASE = "samples"
+DEFAULT_KNOWLEDGE_BASE = ""
 
 # 默认向量库/全文检索引擎类型。可选：faiss, milvus(离线) & zilliz(在线), pgvector, chromadb 全文检索引擎es
 DEFAULT_VS_TYPE = "faiss"
