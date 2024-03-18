@@ -528,9 +528,9 @@ def llm_device(device: str = None) -> Literal["cuda", "mps", "cpu", "xpu"]:
     return device
 
 
-def embedding_device(device: str = None) -> Literal["cuda", "mps", "cpu"]:
+def embedding_device(device: str = None) -> Literal["cuda", "mps", "cpu", "xpu"]:
     device = device or EMBEDDING_DEVICE
-    if device not in ["cuda", "mps", "cpu"]:
+    if device not in ["cuda", "mps", "cpu", "xpu"]:
         device = detect_device()
     return device
 

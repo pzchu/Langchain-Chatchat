@@ -9,6 +9,21 @@ from contextlib import contextmanager
 from collections import OrderedDict
 from typing import List, Any, Union, Tuple
 
+from bigdl.llm.langchain.embeddings import TransformersEmbeddings
+
+# fit specific encode method for HuggingFaceBgeEmbeddings
+# TODO: may support HuggingFaceBgeEmbeddings with BigDL-LLM later
+class TransformersBgeEmbeddings(TransformersEmbeddings):
+
+    def embed(self, text: str, **kwargs):
+        input_ids = self.tokenizer.encode(text, return_tensors="pt", **kwargs)
+        print(input_ids.shape)
+        print(self.model.device)
+        input_ids = input_ids.to(self.model.device)
+        embeddings = self.model(input_ids, return_dict=False)[0].cpu()
+        embeddings = torch.nn.functional.normalize(embeddings[:, 0], p=2, dim=1)
+        return embeddings[0]
+
 
 class ThreadSafeObject:
     def __init__(self, key: Union[str, Tuple], obj: Any = None, pool: "CachePool" = None):
@@ -134,7 +149,6 @@ class EmbeddingsPool(CachePool):
                                                   openai_api_key=get_model_path(model),
                                                   chunk_size=CHUNK_SIZE)
                 elif 'bge-' in model:
-                    from langchain.embeddings import HuggingFaceBgeEmbeddings
                     if 'zh' in model:
                         # for chinese model
                         query_instruction = "为这个句子生成表示以用于检索相关文章："
@@ -144,9 +158,15 @@ class EmbeddingsPool(CachePool):
                     else:
                         # maybe ReRanker or else, just use empty string instead
                         query_instruction = ""
-                    embeddings = HuggingFaceBgeEmbeddings(model_name=get_model_path(model),
-                                                          model_kwargs={'device': device},
-                                                          query_instruction=query_instruction)
+                    if device in ['xpu']:
+                        embeddings = TransformersBgeEmbeddings.from_model_id(model_id=get_model_path(model),
+                                                                             model_kwargs={'load_in_low_bit':"fp16"},
+                                                                             device_map=device)
+                    else:
+                        from langchain.embeddings import HuggingFaceBgeEmbeddings
+                        embeddings = HuggingFaceBgeEmbeddings(model_name=get_model_path(model),
+                                                            model_kwargs={'device': device},
+                                                            query_instruction=query_instruction)
                     if model == "bge-large-zh-noinstruct":  # bge large -noinstruct embedding
                         embeddings.query_instruction = ""
                 else:
