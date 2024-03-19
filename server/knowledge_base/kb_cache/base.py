@@ -17,8 +17,6 @@ class TransformersBgeEmbeddings(TransformersEmbeddings):
 
     def embed(self, text: str, **kwargs):
         input_ids = self.tokenizer.encode(text, return_tensors="pt", **kwargs)
-        print(input_ids.shape)
-        print(self.model.device)
         input_ids = input_ids.to(self.model.device)
         embeddings = self.model(input_ids, return_dict=False)[0].cpu()
         embeddings = torch.nn.functional.normalize(embeddings[:, 0], p=2, dim=1)
