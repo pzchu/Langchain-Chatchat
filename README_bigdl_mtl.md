@@ -50,7 +50,7 @@ python warmup.py
 
 > The warmup may take several minutes.
 
-### Start the Service
+## Start the Service
 In the Anaconda Prompt windows:
 ```cmd
 call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
