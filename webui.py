@@ -11,6 +11,12 @@ from server.utils import api_address
 
 api = ApiRequest(base_url=api_address())
 
+if 'language' not in st.session_state:
+    st.session_state['language'] = '简体中文' # default language setting
+
+def update_language_choice():
+    st.session_state['language'] = st.session_state['selected_language']
+
 if __name__ == "__main__":
     is_lite = "lite" in sys.argv
 
@@ -48,6 +54,22 @@ if __name__ == "__main__":
             f"""<p align="right">当前版本：{VERSION}</p>""",
             unsafe_allow_html=True,
         )
+
+        select_language_text = {
+            'English': '🌐 Interface Display Language',
+            '简体中文': '🌐 界面显示语言',
+        }
+
+        language_options = ["简体中文", "English"]
+        
+        selected_language = st.selectbox(
+            select_language_text[st.session_state['language']],
+            options=language_options,
+            index=language_options.index(st.session_state.get('language', '简体中文')),
+            on_change=update_language_choice,
+            key='selected_language'  
+        )
+
         options = list(pages)
         icons = [x["icon"] for x in pages.values()]
 
