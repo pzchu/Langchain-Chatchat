@@ -19,7 +19,6 @@ chat_box = ChatBox(
     )
 )
 
-
 def get_messages_history(history_len: int, content_in_expander: bool = False) -> List[Dict]:
     '''
     返回消息历史。
@@ -58,6 +57,10 @@ def parse_command(text: str, modal: Modal) -> bool:
     /help。查看命令帮助
     返回值：输入的是命令返回True，否则返回False
     '''
+    if 'language' not in st.session_state:
+        st.session_state['language'] = "简体中文"
+    language = st.session_state['language']
+    
     if m := re.match(r"/([^\s]+)\s*(.*)", text):
         cmd, name = m.groups()
         name = name.strip()
@@ -68,7 +71,10 @@ def parse_command(text: str, modal: Modal) -> bool:
             if not name:
                 i = 1
                 while True:
-                    name = f"会话{i}"
+                    if language=="简体中文":
+                        name = f"会话{i}"
+                    elif language=="English":
+                        name = f"Session{i}"
                     if name not in conv_names:
                         break
                     i += 1
@@ -97,17 +103,26 @@ def parse_command(text: str, modal: Modal) -> bool:
 
 
 def dialogue_page(api: ApiRequest, is_lite: bool = False):
-    language = st.session_state.get('language', '简体中文')
+    if 'language' not in st.session_state:
+        st.session_state['language'] = "简体中文"
+    language = st.session_state['language']
+
     st.session_state.setdefault("conversation_ids", {})
     st.session_state["conversation_ids"].setdefault(chat_box.cur_chat_name, uuid.uuid4().hex)
     st.session_state.setdefault("file_chat_id", None)
     default_model = api.get_default_llm_model()[0]
 
     if not chat_box.chat_inited:
-        st.toast(
-            f"欢迎使用 [`Langchain-Chatchat`](https://github.com/chatchat-space/Langchain-Chatchat) ! \n\n"
-            f"当前运行的模型`{default_model}`, 您可以开始提问了."
-        )
+        if language == "简体中文":
+            st.toast(
+                f"欢迎使用 [`Langchain-Chatchat`](https://github.com/intel-analytics/Langchain-Chatchat/) ! \n\n"
+                f"当前运行的模型`{default_model}`, 您可以开始提问了."
+            )
+        elif language == "English":
+            st.toast(
+                f"Welcome to [`Langchain-Chatchat`](https://github.com/intel-analytics/Langchain-Chatchat/) ! \n\n"
+                f"The current model running is {default_model}. Now you can start asking questions"
+            )
         chat_box.init_session()
 
     # 弹出自定义命令帮助信息
@@ -123,26 +138,43 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         index = 0
         if st.session_state.get("cur_conv_name") in conv_names:
             index = conv_names.index(st.session_state.get("cur_conv_name"))
-        conversation_name = st.selectbox("当前会话：", conv_names, index=index)
+        indicator = {"简体中文":"当前会话：", "English":"Current Session:"}
+        conversation_name = st.selectbox(indicator[language], conv_names, index=index)
         chat_box.use_chat_name(conversation_name)
         conversation_id = st.session_state["conversation_ids"][conversation_name]
 
         def on_mode_change():
             mode = st.session_state.dialogue_mode
-            text = f"已切换到 {mode} 模式。"
-            if mode == "知识库问答":
-                cur_kb = st.session_state.get("selected_kb")
-                if cur_kb:
-                    text = f"{text} 当前知识库： `{cur_kb}`。"
+            text_dict = {"简体中文": f"已切换到 {mode} 模式。","English":f"Switched to {mode} mode"}
+            text = text_dict[language]
+            if language == "简体中文":
+                if mode == "知识库问答":
+                    cur_kb = st.session_state.get("selected_kb")
+                    if cur_kb:
+                        text = f"{text} 当前知识库： `{cur_kb}`。"
+            elif language == "English":
+                if mode == "Knowledge Base QA":
+                    cur_kb = st.session_state.get("selected_kb")
+                    if cur_kb:
+                        text = f"{text} current knowledge base: `{cur_kb}`。"
             st.toast(text)
 
-        dialogue_modes = ["LLM 对话",
-                          "知识库问答",
-                          "文件对话",
-                          "搜索引擎问答",
-                          "自定义Agent问答",
-                          ]
-        dialogue_mode = st.selectbox("请选择对话模式：",
+        if language == "简体中文":
+            dialogue_modes = ["LLM 对话",
+                            "知识库问答",
+                            "文件对话",
+                            "搜索引擎问答",
+                            "自定义Agent问答",
+                            ]
+        elif language == "English":
+            dialogue_modes = ["LLM Chat",
+                            "Knowledge Base QA",
+                            "File Chat",
+                            "Search Engine QA",
+                            "Custom Agent QA",
+                            ]
+        indicator = {"简体中文":"请选择对话模式：", "English":"Select conversation mode:"}
+        dialogue_mode = st.selectbox(indicator[language],
                                      dialogue_modes,
                                      index=0,
                                      on_change=on_mode_change,
@@ -178,7 +210,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             index = llm_models.index(cur_llm_model)
         else:
             index = 0
-        llm_model = st.selectbox("选择LLM模型：",
+        indicator = {"简体中文":"选择LLM模型：","English":"Choose LLM Model:"}
+        llm_model = st.selectbox(indicator[language],
                                  llm_models,
                                  index,
                                  format_func=llm_model_format_func,
@@ -190,7 +223,11 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                 and not llm_model in config_models.get("online", {})
                 and not llm_model in config_models.get("langchain", {})
                 and llm_model not in running_models):
-            with st.spinner(f"正在加载模型： {llm_model}，请勿进行操作或刷新页面"):
+            indicator = {
+                "简体中文":f"正在加载模型： {llm_model}，请勿进行操作或刷新页面",
+                "English":f"Loading model: {llm_model}. Do not perform any operations or refresh the page."
+            }
+            with st.spinner(indicator[language]):
                 prev_model = st.session_state.get("prev_llm_model")
                 r = api.change_llm_model(prev_model, llm_model)
                 if msg := check_error_msg(r):
@@ -198,84 +235,172 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                 elif msg := check_success_msg(r):
                     st.success(msg)
                     st.session_state["prev_llm_model"] = llm_model
-
-        index_prompt = {
-            "LLM 对话": "llm_chat",
-            "自定义Agent问答": "agent_chat",
-            "搜索引擎问答": "search_engine_chat",
-            "知识库问答": "knowledge_base_chat",
-            "文件对话": "knowledge_base_chat",
-        }
+        if language == "简体中文":
+            index_prompt = {
+                "LLM 对话": "llm_chat",
+                "自定义Agent问答": "agent_chat",
+                "搜索引擎问答": "search_engine_chat",
+                "知识库问答": "knowledge_base_chat",
+                "文件对话": "knowledge_base_chat",
+            }
+        elif language == "English":
+            index_prompt = {
+                "LLM Chat": "llm_chat",
+                "Custom Agent QA": "agent_chat",
+                "Search Engine QA": "search_engine_chat",
+                "Knowledge Base QA": "knowledge_base_chat",
+                "File Chat": "knowledge_base_chat",
+            }
         prompt_templates_kb_list = list(PROMPT_TEMPLATES[index_prompt[dialogue_mode]].keys())
         prompt_template_name = prompt_templates_kb_list[0]
         if "prompt_template_select" not in st.session_state:
             st.session_state.prompt_template_select = prompt_templates_kb_list[0]
 
         def prompt_change():
-            text = f"已切换为 {prompt_template_name} 模板。"
+            indicator = {
+                "简体中文":f"已切换为 {prompt_template_name} 模板。",
+                "English":f"Switched to {prompt_template_name} template. "
+            }
+            text = indicator[language]
             st.toast(text)
 
+        indicator = {
+            "简体中文":"请选择Prompt模板：",
+            "English":"Please choose prompt template:"
+        }
         prompt_template_select = st.selectbox(
-            "请选择Prompt模板：",
+            indicator[language],
             prompt_templates_kb_list,
             index=0,
             on_change=prompt_change,
             key="prompt_template_select",
         )
         prompt_template_name = st.session_state.prompt_template_select
+        indicator = {
+            "简体中文":"历史对话轮数：",
+            "English":"Dialogue Rounds: "
+        }
         temperature = st.slider("Temperature：", 0.0, 2.0, TEMPERATURE, 0.05)
-        history_len = st.number_input("历史对话轮数：", 0, 20, HISTORY_LEN)
+        history_len = st.number_input(indicator[language], 0, 20, HISTORY_LEN)
 
         def on_kb_change():
-            st.toast(f"已加载知识库： {st.session_state.selected_kb}")
+            indicator = {
+                "简体中文":f"已加载知识库： {st.session_state.selected_kb}",
+                "English":f"Loaded knowledge base: {st.session_state.selected_kb}"
+            }
+            st.toast(indicator[language])
 
-        if dialogue_mode == "知识库问答":
-            with st.expander("知识库配置", True):
+        indicators = [{
+            "简体中文":"知识库问答",
+            "English":"Knowledge Base QA"
+        },
+        {
+            "简体中文":"文件对话",
+            "English":"File Chat"
+        },
+        {
+            "简体中文":"搜索引擎问答",
+            "English":"Search Engine QA"
+        },
+        ]
+        if dialogue_mode == indicators[0][language]:
+            indicator = {
+                "简体中文":"知识库配置",
+                "English":"Knowledge base settings"
+            }
+            with st.expander(indicator[language], True):
                 kb_list = api.list_knowledge_bases()
                 index = 0
                 if DEFAULT_KNOWLEDGE_BASE in kb_list:
                     index = kb_list.index(DEFAULT_KNOWLEDGE_BASE)
+                indicator = {
+                    "简体中文":"请选择知识库：",
+                    "English":"Choose knowledge base:"
+                }
                 selected_kb = st.selectbox(
-                    "请选择知识库：",
+                    indicator[language],
                     kb_list,
                     index=index,
                     on_change=on_kb_change,
                     key="selected_kb",
                 )
-                kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+                indicator = {
+                    "简体中文":"匹配知识条数：",
+                    "English":"Matched entries:"
+                }
+                kb_top_k = st.number_input(indicator[language], 1, 20, VECTOR_SEARCH_TOP_K)
 
                 ## Bge 模型会超过1
-                score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
-        elif dialogue_mode == "文件对话":
-            with st.expander("文件对话配置", True):
-                files = st.file_uploader("上传知识文件：",
+                indicator = {
+                    "简体中文":"知识匹配分数阈值：",
+                    "English":"Knowledge matching score threshold"
+                }
+                score_threshold = st.slider(indicator[language], 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
+        elif dialogue_mode == indicators[1][language]:
+            indicator = {
+                "简体中文":"文件对话配置",
+                "English":"File Chat Settings"
+            }
+            with st.expander(indicator[language], True):
+                indicator = {
+                    "简体中文":"上传知识文件：",
+                    "English":"Upload knowledge file"
+                }
+                files = st.file_uploader(indicator[language],
                                          [i for ls in LOADER_DICT.values() for i in ls],
                                          accept_multiple_files=True,
                                          )
-                kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+                indicator = {
+                    "简体中文":"匹配知识条数：",
+                    "English":"Matched entries:"
+                }
+                kb_top_k = st.number_input(indicator[language], 1, 20, VECTOR_SEARCH_TOP_K)
 
                 ## Bge 模型会超过1
-                score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
-                if st.button("开始上传", disabled=len(files) == 0):
+                indicator = {
+                    "简体中文":"知识匹配分数阈值：",
+                    "English":"Knowledge matching score threshold"
+                }
+                score_threshold = st.slider(indicator[language], 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
+                indicator = {
+                    "简体中文":"开始上传",
+                    "English":"Start upload"
+                }
+                if st.button(indicator[language], disabled=len(files) == 0):
                     st.session_state["file_chat_id"] = upload_temp_docs(files, api)
-        elif dialogue_mode == "搜索引擎问答":
+        elif dialogue_mode == indicators[2][language]:
             search_engine_list = api.list_search_engines()
             if DEFAULT_SEARCH_ENGINE in search_engine_list:
                 index = search_engine_list.index(DEFAULT_SEARCH_ENGINE)
             else:
                 index = search_engine_list.index("duckduckgo") if "duckduckgo" in search_engine_list else 0
-            with st.expander("搜索引擎配置", True):
+            indicator = {
+                "简体中文":"搜索引擎配置",
+                "English":"Search Engine Settings"
+            }
+            with st.expander(indicator[language], True):
+                indicator = {
+                    "简体中文":"请选择搜索引擎",
+                    "English":"Choose Search Engine",
+                }
                 search_engine = st.selectbox(
-                    label="请选择搜索引擎",
+                    label=indicator[language],
                     options=search_engine_list,
                     index=index,
                 )
-                se_top_k = st.number_input("匹配搜索结果条数：", 1, 20, SEARCH_ENGINE_TOP_K)
+                indicator = {
+                    "简体中文":"匹配搜索结果条数：",
+                    "English":"Matched entries:"
+                }
+                se_top_k = st.number_input(indicator[language], 1, 20, SEARCH_ENGINE_TOP_K)
 
     # Display chat messages from history on app rerun
     chat_box.output_messages()
-
-    chat_input_placeholder = "请输入对话内容，换行请使用Shift+Enter。输入/help查看自定义命令 "
+    indicator = {
+        "简体中文":"请输入对话内容，换行请使用Shift+Enter。输入/help查看自定义命令 ",
+        "English":"Type your message here. Use Shift+Enter for new lines. Type /help for custom commands."
+    }
+    chat_input_placeholder = indicator[language]
 
     def on_feedback(
             feedback,
@@ -289,9 +414,10 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                           reason=reason)
         st.session_state["need_rerun"] = True
 
+    
     feedback_kwargs = {
         "feedback_type": "thumbs",
-        "optional_text_label": "欢迎反馈您打分的理由",
+        "optional_text_label": "欢迎反馈您打分的理由" if language=="简体中文" else "Additional feedback on your ratings? Please share.",
     }
 
     if prompt := st.chat_input(chat_input_placeholder, key="prompt"):
@@ -300,8 +426,33 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         else:
             history = get_messages_history(history_len)
             chat_box.user_say(prompt)
-            if dialogue_mode == "LLM 对话":
-                chat_box.ai_say("正在思考...")
+            indicators = [{
+                    '简体中文':"LLM 对话",
+                    "English":"LLM Chat"
+                },
+                {
+                    '简体中文':"自定义Agent问答",
+                    "English":"Custom Agent QA",
+                },
+                {
+                    "简体中文":"知识库问答",
+                    "English":"Knowledge Base QA"
+                },
+                {
+                    "简体中文":"文件对话",
+                    "English":"File Chat"
+                },
+                {
+                    "简体中文":"搜索引擎问答",
+                    "English":"Search Engine QA"
+                },
+                ]
+            if dialogue_mode == indicators[0][language]:
+                indicator = {
+                    '简体中文':"正在思考...",
+                    "English":"Thinking..."
+                }
+                chat_box.ai_say(indicator[language])
                 text = ""
                 message_id = ""
                 r = api.chat_chat(prompt,
@@ -327,17 +478,33 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                                        on_submit=on_feedback,
                                        kwargs={"message_id": message_id, "history_index": len(chat_box.history) - 1})
 
-            elif dialogue_mode == "自定义Agent问答":
+            elif dialogue_mode == indicators[1][language]:
                 if not any(agent in llm_model for agent in SUPPORT_AGENT_MODEL):
+                    indicator = {
+                    '简体中文':f"正在思考... \n\n <span style='color:red'>该模型并没有进行Agent对齐，请更换支持Agent的模型获得更好的体验！</span>\n\n\n",
+                    "English":"Thinking... \n\n <span style='color:red'> This model does not align with the Agent. Please switch to a model that supports Agent alignment for a better experience!</span>\n\n\n"
+                    }
+                    title_indicator = {
+                        "简体中文":"思考过程",
+                        "English":"Thinking process"
+                    }
                     chat_box.ai_say([
-                        f"正在思考... \n\n <span style='color:red'>该模型并没有进行Agent对齐，请更换支持Agent的模型获得更好的体验！</span>\n\n\n",
-                        Markdown("...", in_expander=True, title="思考过程", state="complete"),
+                        indicator[language],
+                        Markdown("...", in_expander=True, title=title_indicator[language], state="complete"),
 
                     ])
                 else:
+                    indicator = {
+                    '简体中文':"正在思考...",
+                    "English":"Thinking..."
+                    }
+                    title_indicator = {
+                        "简体中文":"思考过程",
+                        "English":"Thinking process"
+                    }
                     chat_box.ai_say([
-                        f"正在思考...",
-                        Markdown("...", in_expander=True, title="思考过程", state="complete"),
+                        indicator[language],
+                        Markdown("...", in_expander=True, title=title_indicator[language], state="complete"),
 
                     ])
                 text = ""
@@ -365,10 +532,18 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                         chat_box.update_msg(text, element_index=1)
                 chat_box.update_msg(ans, element_index=0, streaming=False)
                 chat_box.update_msg(text, element_index=1, streaming=False)
-            elif dialogue_mode == "知识库问答":
+            elif dialogue_mode == indicators[2][language]:
+                indicator = {
+                    "简体中文":f"正在查询知识库 `{selected_kb}` ...",
+                    "English":f"Looking into  `{selected_kb}` ..."
+                }
+                title_indicator = {
+                    "简体中文":"知识库匹配结果",
+                    "English":"Knowledge base match result"
+                }
                 chat_box.ai_say([
-                    f"正在查询知识库 `{selected_kb}` ...",
-                    Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
+                    indicator[language],
+                    Markdown("...", in_expander=True, title=title_indicator[language], state="complete"),
                 ])
                 text = ""
                 for d in api.knowledge_base_chat(prompt,
@@ -386,13 +561,21 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                         chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
                 chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
-            elif dialogue_mode == "文件对话":
+            elif dialogue_mode == indicators[3][language]:
                 if st.session_state["file_chat_id"] is None:
                     st.error("请先上传文件再进行对话")
                     st.stop()
+                indicator = {
+                    '简体中文':f"正在查询文件 `{st.session_state['file_chat_id']}` ...",
+                    'English':f"Searching `{st.session_state['file_chat_id']}` ",
+                }
+                title_indicator = {
+                    '简体中文':"文件匹配结果",
+                    "English":"Matched results"
+                }
                 chat_box.ai_say([
-                    f"正在查询文件 `{st.session_state['file_chat_id']}` ...",
-                    Markdown("...", in_expander=True, title="文件匹配结果", state="complete"),
+                    indicator[language],
+                    Markdown("...", in_expander=True, title=title_indicator[language], state="complete"),
                 ])
                 text = ""
                 for d in api.file_chat(prompt,
@@ -410,10 +593,14 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                         chat_box.update_msg(text, element_index=0)
                 chat_box.update_msg(text, element_index=0, streaming=False)
                 chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
-            elif dialogue_mode == "搜索引擎问答":
+            elif dialogue_mode == indicators[4][language]:
+                title_indicator = {
+                    '简体中文':"网络搜索结果",
+                    "English":"Searched result"
+                }
                 chat_box.ai_say([
-                    f"正在执行 `{search_engine}` 搜索...",
-                    Markdown("...", in_expander=True, title="网络搜索结果", state="complete"),
+                    f"正在执行 `{search_engine}` 搜索..." if language=='简体中文' else f"Running `{search_engine}` search ..." ,
+                    Markdown("...", in_expander=True, title=title_indicator[language], state="complete"),
                 ])
                 text = ""
                 for d in api.search_engine_chat(prompt,
@@ -442,16 +629,16 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         cols = st.columns(2)
         export_btn = cols[0]
         if cols[1].button(
-                "清空对话",
+                "清空对话" if language == "简体中文" else "Clear Chat",
                 use_container_width=True,
         ):
             chat_box.reset_history()
             st.rerun()
 
     export_btn.download_button(
-        "导出记录",
+        "导出记录" if language == "简体中文" else "Export Chat",
         "".join(chat_box.export2md()),
-        file_name=f"{now:%Y-%m-%d %H.%M}_对话记录.md",
+        file_name=f"{now:%Y-%m-%d %H.%M}_对话记录.md" if language == "简体中文" else f"{now:%Y-%m-%d %H.%M}_record.md" ,
         mime="text/markdown",
         use_container_width=True,
     )
