@@ -54,11 +54,15 @@ def file_exists(kb: str, selected_rows: List) -> Tuple[str, str]:
 
 def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
     language = st.session_state.get('language', '简体中文')
+
+    error_text = {
+        "English": "Error occurred when getting knowledge base details, please check if you have initialized or migrated the knowledge base according to `README.md` or if there is a database connection error.",
+        "简体中文": "获取知识库信息错误，请检查是否已按照 `README.md` 中 `4 知识库初始化与迁移` 步骤完成初始化或迁移，或是否为数据库连接错误。"
+    }
     try:
         kb_list = {x["kb_name"]: x for x in get_kb_details()}
     except Exception as e:
-        st.error(
-            "获取知识库信息错误，请检查是否已按照 `README.md` 中 `4 知识库初始化与迁移` 步骤完成初始化或迁移，或是否为数据库连接错误。")
+        st.error(error_text[language])
         st.stop()
     kb_names = list(kb_list.keys())
 
@@ -76,24 +80,44 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
         else:
             return kb_name
 
+    select_kb_text = {
+        "English": "New Knowledge Base",
+        "简体中文": "新建知识库"
+    }
     selected_kb = st.selectbox(
-        "请选择或新建知识库：",
-        kb_names + ["新建知识库"],
+        {
+            'English': 'Please select or create a knowledge base:',
+            '简体中文': '请选择或新建知识库：'
+        }[language],
+        kb_names + [select_kb_text[language]],
         format_func=format_selected_kb,
         index=selected_kb_index
     )
 
-    if selected_kb == "新建知识库":
-        with st.form("新建知识库"):
+    
+    if selected_kb == select_kb_text["English"] or selected_kb == select_kb_text["简体中文"]:
+        with st.form(select_kb_text[language]):
 
             kb_name = st.text_input(
-                "新建知识库名称",
-                placeholder="新知识库名称，不支持中文命名",
+                {
+                    "English": "New Knowledge Base Name",
+                    "简体中文": "新建知识库名称"
+                }[language],
+                placeholder={
+                    "简体中文":"新知识库名称，不支持中文命名",
+                    "English":"New knowledge base name, no Chinese characters supported"
+                }[language],
                 key="kb_name",
             )
             kb_info = st.text_input(
-                "知识库简介",
-                placeholder="知识库简介，方便Agent查找",
+                {
+                    "简体中文":"知识库简介",
+                    "English":"Knowledge Base Introduction"
+                }[language],
+                placeholder={
+                    "简体中文":"知识库简介，方便Agent查找",
+                    "English":"Write a Knowledge Base introduction for Agent to find matches efficiently"
+                }[language],
                 key="kb_info",
             )
 
@@ -101,7 +125,10 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
 
             vs_types = list(kbs_config.keys())
             vs_type = cols[0].selectbox(
-                "向量库类型",
+                {
+                    "简体中文":"向量库类型",
+                    "English":"Vector Store Type"
+                }[language],
                 vs_types,
                 index=vs_types.index(DEFAULT_VS_TYPE),
                 key="vs_type",
@@ -113,23 +140,37 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                 embed_models = list_embed_models() + list_online_embed_models()
 
             embed_model = cols[1].selectbox(
-                "Embedding 模型",
+                {
+                    "简体中文":"Embedding 模型",
+                    "English":"Embedding Model"
+                }[language],
                 embed_models,
                 index=embed_models.index(EMBEDDING_MODEL),
                 key="embed_model",
             )
 
             submit_create_kb = st.form_submit_button(
-                "新建",
+                {
+                    "简体中文":"新建",
+                    "English":"Create"
+                }[language],
                 # disabled=not bool(kb_name),
                 use_container_width=True,
             )
 
         if submit_create_kb:
             if not kb_name or not kb_name.strip():
-                st.error(f"知识库名称不能为空！")
+                st.error({
+                    "简体中文":"知识库名称不能为空!",
+                    "English":"Knowledge Base Name cannot be empty!"
+                }[language])
             elif kb_name in kb_list:
-                st.error(f"名为 {kb_name} 的知识库已经存在！")
+                st.error(
+                    {
+                        "简体中文": "知识库名称已存在，请重新输入",
+                        "English": "Knowledge Base Name already exists, please input another name"
+                    }[language]
+                )
             else:
                 ret = api.create_knowledge_base(
                     knowledge_base_name=kb_name,
@@ -145,13 +186,18 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
         kb = selected_kb
         st.session_state["selected_kb_info"] = kb_list[kb]['kb_info']
         # 上传文件
-        files = st.file_uploader("上传知识文件：",
+        files = st.file_uploader({
+                                    '简体中文':"上传知识文件：",
+                                    "English":"Upload Knowledge Files:"
+                                }[language],
                                  [i for ls in LOADER_DICT.values() for i in ls],
                                  accept_multiple_files=True,
                                  )
-        kb_info = st.text_area("请输入知识库介绍:", value=st.session_state["selected_kb_info"], max_chars=None,
-                               key=None,
-                               help=None, on_change=None, args=None, kwargs=None)
+        kb_info = st.text_area({
+                                    '简体中文':"请输入知识库介绍:",
+                                    "English":"Please input knowledge base introduction:"
+                                }[language], value=st.session_state["selected_kb_info"], max_chars=None,
+                               key=None, help=None, on_change=None, args=None, kwargs=None)
 
         if kb_info != st.session_state["selected_kb_info"]:
             st.session_state["selected_kb_info"] = kb_info
@@ -159,18 +205,36 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
 
         # with st.sidebar:
         with st.expander(
-                "文件处理配置",
+                {
+                    "简体中文": "文件处理配置",
+                    "English": "File Processing Configuration"
+                }[language],
                 expanded=True,
         ):
             cols = st.columns(3)
-            chunk_size = cols[0].number_input("单段文本最大长度：", 1, 1000, CHUNK_SIZE)
-            chunk_overlap = cols[1].number_input("相邻文本重合长度：", 0, chunk_size, OVERLAP_SIZE)
+            chunk_size = cols[0].number_input({
+                '简体中文':"单段文本最大长度: ",
+                "English":"Max Length of Each Text: "
+            }[language], 1, 1000, CHUNK_SIZE)
+
+            chunk_overlap = cols[1].number_input({
+                "简体中文": "相邻文本重合长度：",
+                "English": "Overlap Length of adjacent texts: "
+            }[language], 0, chunk_size, OVERLAP_SIZE)
+
             cols[2].write("")
             cols[2].write("")
-            zh_title_enhance = cols[2].checkbox("开启中文标题加强", ZH_TITLE_ENHANCE)
+
+            zh_title_enhance = cols[2].checkbox({
+                "简体中文": "开启中文标题加强",
+                "English": "Enable Chinese Title Enhancement"
+            }[language], ZH_TITLE_ENHANCE)
 
         if st.button(
-                "添加文件到知识库",
+                {
+                    '简体中文':"添加文件到知识库",
+                    "English":"Add Files to Knowledge Base"
+                }[language],
                 # use_container_width=True,
                 disabled=len(files) == 0,
         ):
@@ -192,16 +256,26 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
         doc_details = pd.DataFrame(get_kb_file_details(kb))
         selected_rows = []
         if not len(doc_details):
-            st.info(f"知识库 `{kb}` 中暂无文件")
+            st.info({
+                "简体中文": f"知识库 `{kb}` 中暂无文件",
+                "English": f"No files in knowledge base `{kb}`"
+            }[language])
         else:
-            st.write(f"知识库 `{kb}` 中已有文件:")
-            st.info("知识库中包含源文件与向量库，请从下表中选择文件后操作")
+            st.write({
+                "简体中文": f"知识库 `{kb}` 中已有文件",
+                "English": f"Files in knowledge base `{kb}`"
+            }[language])
+            st.info({
+                '简体中文':"知识库中包含源文件与向量库，请从下表中选择文件后操作",
+                "English":"The knowledge base contains source files and vector stores, please select a file from the table below to proceed"
+            }[language])
             doc_details.drop(columns=["kb_name"], inplace=True)
             doc_details = doc_details[[
                 "No", "file_name", "document_loader", "text_splitter", "docs_count", "in_folder", "in_db",
             ]]
             doc_details["in_folder"] = doc_details["in_folder"].replace(True, "✓").replace(False, "×")
             doc_details["in_db"] = doc_details["in_db"].replace(True, "✓").replace(False, "×")
+
             gb = config_aggrid(
                 doc_details,
                 {
@@ -238,13 +312,19 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             if file_path:
                 with open(file_path, "rb") as fp:
                     cols[0].download_button(
-                        "下载选中文档",
+                        {
+                            "简体中文": "下载选中文档",
+                            "English": "Download Selected Files"
+                        }[language],
                         fp,
                         file_name=file_name,
                         use_container_width=True, )
             else:
                 cols[0].download_button(
-                    "下载选中文档",
+                    {
+                        "简体中文": "下载选中文档",
+                        "English": "Download Selected Files"
+                    }[language],
                     "",
                     disabled=True,
                     use_container_width=True, )
@@ -252,8 +332,10 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             st.write()
             # 将文件分词并加载到向量库中
             if cols[1].button(
-                    "重新添加至向量库" if selected_rows and (
-                            pd.DataFrame(selected_rows)["in_db"]).any() else "添加至向量库",
+                    {"简体中文":"重新添加至向量库", "English": "Re-add to Vector Store"}[language] 
+                    if selected_rows and (
+                            pd.DataFrame(selected_rows)["in_db"]).any() else {"简体中文":"添加至向量库",
+                                                                              "English":"Add to Vector Store"}[language],
                     disabled=not file_exists(kb, selected_rows)[0],
                     use_container_width=True,
             ):
@@ -267,7 +349,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
 
             # 将文件从向量库中删除，但不删除文件本身。
             if cols[2].button(
-                    "从向量库删除",
+                    {"简体中文":"从向量库删除","English":"Delete from Vector Store"}[language],
                     disabled=not (selected_rows and selected_rows[0]["in_db"]),
                     use_container_width=True,
             ):
@@ -276,7 +358,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                 st.rerun()
 
             if cols[3].button(
-                    "从知识库中删除",
+                    {"简体中文":"从知识库中删除", "English":"Delete from Knowledge Base"}[language],
                     type="primary",
                     use_container_width=True,
             ):
@@ -289,12 +371,19 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
         cols = st.columns(3)
 
         if cols[0].button(
-                "依据源文件重建向量库",
-                help="无需上传文件，通过其它方式将文档拷贝到对应知识库content目录下，点击本按钮即可重建知识库。",
+                {"简体中文":"依据源文件重建向量库",
+                "English":"Recreate Vector Store based on Source Files"}[language],
+                help={
+                    "简体中文":"无需上传文件，通过其它方式将文档拷贝到对应知识库content目录下，点击本按钮即可重建知识库。",
+                    "English":"No need to upload files. Please copy the documents to the corresponding knowledge base content directory by other means, and click this button to rebuild the knowledge base."
+                }[language],
                 use_container_width=True,
                 type="primary",
         ):
-            with st.spinner("向量库重构中，请耐心等待，勿刷新或关闭页面。"):
+            with st.spinner({
+                "简体中文":"向量库重构中，请耐心等待，勿刷新或关闭页面。",
+                "English":"Reconstructing Vector Store, please wait patiently, and do not refresh or close the page."
+            }[language]):
                 empty = st.empty()
                 empty.progress(0.0, "")
                 for d in api.recreate_vector_store(kb,
@@ -308,7 +397,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                 st.rerun()
 
         if cols[2].button(
-                "删除知识库",
+                {"简体中文":"删除知识库", "English":"Delete Knowledge Base"}[language],
                 use_container_width=True,
         ):
             ret = api.delete_knowledge_base(kb)
@@ -317,10 +406,11 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             st.rerun()
 
         with st.sidebar:
-            keyword = st.text_input("查询关键字")
-            top_k = st.slider("匹配条数", 1, 100, 3)
+            keyword = st.text_input({"简体中文":"查询关键字", "English":"Search Keyword"}[language])
+            top_k = st.slider({"简体中文":"匹配条数", "English":"Match Entries"}[language], 1, 100, 3)
 
-        st.write("文件内文档列表。双击进行修改，在删除列填入 Y 可删除对应行。")
+        st.write({"简体中文":"文件内文档列表。双击进行修改，在删除列填入 Y 可删除对应行。",
+                "English":"Document list in the file. Double-click to modify, fill in Y in the delete column to delete the corresponding row."}[language])
         docs = []
         df = pd.DataFrame([], columns=["seq", "id", "content", "source"])
         if selected_rows:
@@ -337,14 +427,14 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             gb = GridOptionsBuilder.from_dataframe(df)
             gb.configure_columns(["id", "source", "type", "metadata"], hide=True)
             gb.configure_column("seq", "No.", width=50)
-            gb.configure_column("page_content", "内容", editable=True, autoHeight=True, wrapText=True, flex=1,
+            gb.configure_column("page_content", {"简体中文":"内容","English":"Content"}[language], editable=True, autoHeight=True, wrapText=True, flex=1,
                                 cellEditor="agLargeTextCellEditor", cellEditorPopup=True)
-            gb.configure_column("to_del", "删除", editable=True, width=50, wrapHeaderText=True,
+            gb.configure_column("to_del", {"简体中文":"删除", "English":"Delete"}[language], editable=True, width=50, wrapHeaderText=True,
                                 cellEditor="agCheckboxCellEditor", cellRender="agCheckboxCellRenderer")
             gb.configure_selection()
             edit_docs = AgGrid(df, gb.build())
 
-            if st.button("保存更改"):
+            if st.button({"简体中文":"保存更改", "English":"Save Changes"}[language]):
                 origin_docs = {
                     x["id"]: {"page_content": x["page_content"], "type": x["type"], "metadata": x["metadata"]} for x in
                     docs}
@@ -363,6 +453,12 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                     if api.update_kb_docs(knowledge_base_name=selected_kb,
                                           file_names=[file_name],
                                           docs={file_name: changed_docs}):
-                        st.toast("更新文档成功")
+                        st.toast({
+                            "简体中文":"更新文档成功",
+                            "English":"Update Document Successfully"
+                        }[language])
                     else:
-                        st.toast("更新文档失败")
+                        st.toast({
+                            "简体中文":"更新文档失败",
+                            "English":"Failed to Update Document"
+                        }[language])
