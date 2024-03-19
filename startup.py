@@ -171,6 +171,10 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
             sys.modules["fastchat.serve.vllm_worker"].logger.setLevel(log_level)
 
         else:
+            # fit BigDL-LLM supported model worker with required model name
+            # More info here: https://github.com/intel-analytics/BigDL/tree/main/python/llm/src/bigdl/llm/serving#models
+            model_path = args.model_path.replace("Llama-2-7b-chat-hf", "bigdl-7b-chat-hf")
+
             from fastchat.serve.model_worker import GptqConfig, AWQConfig, worker_id
             if args.device in ['xpu']:
                 from bigdl.llm.serving.bigdl_llm_model import patch_fastchat
@@ -210,13 +214,13 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
                     )
                 os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus
             gptq_config = GptqConfig(
-                ckpt=args.gptq_ckpt or args.model_path,
+                ckpt=args.gptq_ckpt or model_path,
                 wbits=args.gptq_wbits,
                 groupsize=args.gptq_groupsize,
                 act_order=args.gptq_act_order,
             )
             awq_config = AWQConfig(
-                ckpt=args.awq_ckpt or args.model_path,
+                ckpt=args.awq_ckpt or model_path,
                 wbits=args.awq_wbits,
                 groupsize=args.awq_groupsize,
             )
@@ -226,7 +230,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
                     controller_addr=args.controller_address,
                     worker_addr=args.worker_address,
                     worker_id=worker_id,
-                    model_path=args.model_path,
+                    model_path=model_path,
                     model_names=args.model_names,
                     limit_worker_concurrency=args.limit_worker_concurrency,
                     no_register=args.no_register,
@@ -250,7 +254,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
                     controller_addr=args.controller_address,
                     worker_addr=args.worker_address,
                     worker_id=worker_id,
-                    model_path=args.model_path,
+                    model_path=model_path,
                     model_names=args.model_names,
                     limit_worker_concurrency=args.limit_worker_concurrency,
                     no_register=args.no_register,

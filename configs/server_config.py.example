@@ -93,7 +93,7 @@ FSCHAT_MODEL_WORKERS = {
     "chatglm3-6b": {
         "device": "xpu",
     },
-    "Qwen1.5-0.5B-Chat": {
+    "Llama-2-7b-chat-hf": {
         "device": "xpu",
     },
     # 以下配置可以不用修改，在model_config中设置启动的模型
