@@ -1,6 +1,6 @@
 ![](img/logo-long-chatchat-trans-v2.png)
 
-🌍 [中文文档](README.md)
+🌍 [中文文档](README_chs.md)
 🌍 [READ THIS IN ENGLISH](README_en.md)
 
 📃 **LangChain-Chatchat** (旧名 Langchain-ChatGLM)
