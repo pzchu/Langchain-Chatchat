@@ -25,16 +25,32 @@ pip install -r requirements_api_bigdl.txt
 pip install -r requirements_webui.txt
 ```
 
-## Start the Service
-### Prepare the configuration file
+## Prepare Configuration Files
 ```bash
 python copy_config_example.py
 ```
 And then change `MODEL_ROOT_PATH` in `configs\model_config.py` to the folder path where you place the models (LLMs, embedding models, etc.)
 
-> Note that currently only the default [chatglm3-6b](https://huggingface.co/THUDM/chatglm3-6b) and [bge-large-zh-v1.5](https://huggingface.co/BAAI/bge-large-zh-v1.5) has been verified. For services with default model settings, please make sure you have these two models in your `MODEL_ROOT_PATH` folder.
+### Download models
+Currently LLMs `THUDM/chatglm3-6b` and `meta-llama/Llama-2-7b-chat-hf`, as well as embedding model `BAAI/bge-large-zh-v1.5` have been supported. Please download these 3 models to your `MODEL_ROOT_PATH` folder and **change the folder name of your downloaded model as required**:
 
-### Start the service
+| Model | link to download | Downloaded model folder name |
+|:--|:--|:--|
+|`THUDM/chatglm3-6b`| [HF](https://huggingface.co/THUDM/chatglm3-6b) or [ModelScope](https://www.modelscope.cn/models/ZhipuAI/chatglm3-6b/summary) | chatglm3-6b |
+|`meta-llama/Llama-2-7b-chat-hf`| [HF](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) | bigdl-7b-chat-hf |
+|`BAAI/bge-large-zh-v1.5`| [HF](https://huggingface.co/BAAI/bge-large-zh-v1.5) | bge-large-zh-v1.5 |
+
+## One-time Warmup
+It is required to conduct a one-time warmup for GPU kernels compilation.
+
+In the Anaconda Prompt windows:
+```cmd
+python warmup.py
+```
+
+>> The warmup may take several minutes.
+
+### Start the Service
 In the Anaconda Prompt windows:
 ```cmd
 call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
