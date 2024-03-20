@@ -1,16 +1,16 @@
-# Langchain-chatchat with BigDL-LLM Acceleration on Intel GPUs
+# Langchain-Chatchat with BigDL-LLM Acceleration on Intel GPUs
 
 
-A RAG (Retrieval Augmented Generation) application aims to implement knowledge and search engine based QA using LLMs with **BigDL-LLM** accelerations. 
+This is a RAG (Retrieval Augmented Generation) application that aims to implement knowledge and search engine based QA using LLMs optimized by **BigDL-LLM**. 
 
-This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat) which includes BigDL-LLM optimizations to run it on **Intel GPUs**.
+This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat) which includes BigDL-LLM optimizations to run it on **Intel GPUs**. You can change the UI language in the left-side menu. Now we support **English** and **简体中文** (see screenshot below). 
 
-The following sections introduces how to install and run Langchain-chatchat on Intel Core Ultra platform, utilizing the iGPU to run both LLMs and embedding models. 
+<div style="display:inline-block">
+  <img src="img/bigdl-ui-en-rag.png" alt="image1" width="50%"><img src="img/bigdl-ui-chs-rag.png" alt="image2" width="50%">
+</div>
 
-
-![alt text](img/bigdl-ui-chs-chat.png)
-
-
+<br/>
+The following sections introduces how to install and run Langchain-chatchat on **Intel Core Ultra platform (MTL)**, utilizing the iGPU to run both LLMs and embedding models. 
 
 ## Installation
 
@@ -71,7 +71,7 @@ conda activate bigdl-langchain-chatchat
 python warmup.py
 ```
 
-> **Note**: The warmup may take several minutes. You just have to run it one-time on after installation. Later if you want to use it, you can just start the service and open 
+> **Note**: The warmup may take several minutes. You just have to run it one-time on after installation. 
 
 ## Start the Service
  Open **Anaconda Prompt (miniconda3)** and run the following commands:
@@ -89,21 +89,33 @@ Open a browser and navigate to the URL to use the Web UI.
 
 ## Usage
 
-To begin, simply type your messages in the textbox at the bottom of the UI and leave all menu options to defaults. 
+To start chatting with LLMs, simply type your messages in the textbox at the bottom of the UI. By default, the conversation mode is `LLM Chat`, which does not involve any external knowledge. 
 
-Once you're familar with the basics, you can continue to customize your experience through options in the left-side menu. For example,  
+### How to use RAG
 
-- Change the UI language in `界面显示语言`. Now we support English and Simplified Chinese. 
-- Choose `对话模式`: `LLM对话` for chatting without RAG; `知识库问答`/`文件问答`for chatting with RAG. 
-- Choose LLM: chatglm, llama2, etc.
-- Choose prompt templates
-- Specify Rounds of Conversation history to keep. 
+#### Step 1: Create Knowledge Base
+
+- Choose `Manage Knowledge Base` in the left menu, choose `New Knowledge Base` 
+ in the dropdown menu. 
+    ![alt text](img/new-kb.png)
+- Fill in the information of the knowledge base, choose embedding model, and click `Create`. 
+    ![alt text](img/create-kb.png)
+- Upload knowledge files from your computer, wait some time for the upload to finish, and click `Add files to Knowledge Base` to create the vector store. Note: This may take a few minutes to finish. 
+    ![alt text](img/build-kb.png)
+
+#### Step 2: Chat with RAG
+
+You can now click `Dialogue` to return to the chat UI， and select `Knowledge Base QA` in `Conversation Mode`. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created. Now you can start chatting. 
+
+<div style="display:inline-block">
+  <img src="img/rag-menu-1.png" alt="image1" width="50%"><img src="img/rag-menu-2.png" alt="image2" width="50%">
+</div>
+
 
 
 For more information about how to use Langchain-Chatchat, refer to Official Quickstart guide in [English README](./README_en.md), or [中文文档](./README_chs.md), as well as the [Full Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/). 
 
 
-![alt text](img/bigdl-ui-chs-chat.png)
  
 
 
