@@ -340,7 +340,7 @@ def get_model_path(model_name: str, type: str = None) -> Optional[str]:
 
         root_path = Path(MODEL_ROOT_PATH)
         if root_path.is_dir():
-            path = root_path / model_name
+            path = root_path / model_name.replace("Llama-2-7b-chat-hf", "bigdl-7b-chat-hf")
             if path.is_dir():  # use key, {MODEL_ROOT_PATH}/chatglm-6b
                 return str(path)
             path = root_path / path_str

@@ -176,7 +176,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         indicator = {"简体中文":"请选择对话模式：", "English":"Select conversation mode:"}
         dialogue_mode = st.selectbox(indicator[language],
                                      dialogue_modes,
-                                     index=0,
+                                     index=1,
                                      on_change=on_mode_change,
                                      key="dialogue_mode",
                                      )

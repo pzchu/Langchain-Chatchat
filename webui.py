@@ -12,7 +12,7 @@ from server.utils import api_address
 api = ApiRequest(base_url=api_address())
 
 if 'language' not in st.session_state:
-    st.session_state['language'] = '简体中文' # default language setting
+    st.session_state['language'] = 'English' # default language setting
 
 def update_language_choice():
     st.session_state['language'] = st.session_state['selected_language']
