@@ -31,12 +31,23 @@ if __name__ == "__main__":
         }
     )
 
+    pages_text = {
+        "dialogue":{
+            "简体中文": "对话",
+            "English": "Dialogue"
+        },
+        "kb":{
+            "简体中文": "知识库管理",
+            "English": "Manage Knowledge Base"
+        }
+    }
+
     pages = {
-        "对话": {
+        pages_text["dialogue"][st.session_state['language']]: {
             "icon": "chat",
             "func": dialogue_page,
         },
-        "知识库管理": {
+        pages_text["kb"][st.session_state['language']]: {
             "icon": "hdd-stack",
             "func": knowledge_base_page,
         },
@@ -50,8 +61,13 @@ if __name__ == "__main__":
             ),
             use_column_width=True
         )
+        
+        version_text = {
+            "简体中文": "当前版本：",
+            "English": "Current Version: "
+        }
         st.caption(
-            f"""<p align="right">当前版本：{VERSION}</p>""",
+            f"""<p align="right">{version_text[st.session_state['language']]}{VERSION}</p>""",
             unsafe_allow_html=True,
         )
 
