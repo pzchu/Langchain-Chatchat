@@ -331,6 +331,9 @@ def get_model_path(model_name: str, type: str = None) -> Optional[str]:
             paths.update(v)
 
     if path_str := paths.get(model_name):  # 以 "chatglm-6b": "THUDM/chatglm-6b-new" 为例，以下都是支持的路径
+        # fit BigDL-LLM supported model worker with required model name
+        # More info here: https://github.com/intel-analytics/BigDL/tree/main/python/llm/src/bigdl/llm/serving#models
+        path_str = path_str.replace("Llama-2-7b-chat-hf", "bigdl-7b-chat-hf")
         path = Path(path_str)
         if path.is_dir():  # 任意绝对路径
             return str(path)

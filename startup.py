@@ -171,10 +171,6 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
             sys.modules["fastchat.serve.vllm_worker"].logger.setLevel(log_level)
 
         else:
-            # fit BigDL-LLM supported model worker with required model name
-            # More info here: https://github.com/intel-analytics/BigDL/tree/main/python/llm/src/bigdl/llm/serving#models
-            model_path = args.model_path.replace("Llama-2-7b-chat-hf", "bigdl-7b-chat-hf")
-
             from fastchat.serve.model_worker import GptqConfig, AWQConfig, worker_id
             if args.device in ['xpu']:
                 from bigdl.llm.serving.bigdl_llm_model import patch_fastchat
