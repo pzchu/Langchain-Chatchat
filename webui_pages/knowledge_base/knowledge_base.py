@@ -184,7 +184,12 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
 
     elif selected_kb:
         kb = selected_kb
-        st.session_state["selected_kb_info"] = kb_list[kb]['kb_info']
+        kb_name = kb_list[kb]['kb_name']
+        kb_info_text = {
+            "简体中文": f"关于数据库{kb_name}的介绍",
+            "English": f"Introduction of Knowledge Base {kb_name}"
+        }
+        st.session_state["selected_kb_info"] = kb_info_text[language]
         # 上传文件
         files = st.file_uploader({
                                     '简体中文':"上传知识文件：",
