@@ -74,7 +74,7 @@ del model
 gc.collect()
 
 print("-"*20, " Start warming-up embedding model bge-large-zh-v1.5 on MTL iGPU ", "-"*20)
-# Refering: https://huggingface.co/BAAI/bge-large-en-v1.5#using-huggingface-transformers
+# Refering: https://huggingface.co/BAAI/bge-large-zh-v1.5#using-huggingface-transformers
 model_path = Path(MODEL_ROOT_PATH) / "bge-large-zh-v1.5"
 
 model = AutoModel.from_pretrained(model_path,
