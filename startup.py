@@ -333,13 +333,17 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
             model_name: str = Body(..., description="要释放模型的名称", samples=["chatglm-6b"]),
             # worker_address: str = Body(None, description="要释放模型的地址，与名称二选一", samples=[FSCHAT_CONTROLLER_address()]),
             new_model_name: str = Body(None, description="释放后加载该模型"),
+            language: str = Body(..., description="界面显示语言"),
             keep_origin: bool = Body(False, description="不释放原模型，加载新模型")
     ) -> Dict:
         available_models = app._controller.list_models()
         if new_model_name in available_models:
-            msg = f"要切换的LLM模型 {new_model_name} 已经存在"
-            logger.info(msg)
-            return {"code": 500, "msg": msg}
+            msg = {
+                "简体中文": f"要切换的LLM模型 {new_model_name} 已经存在",
+                "English": f"The LLM model {new_model_name} already exists"
+            }
+            logger.info(msg[language])
+            return {"code": 500, "msg": msg[language]}
 
         if new_model_name:
             logger.info(f"开始切换LLM模型：从 {model_name} 到 {new_model_name}")
@@ -347,23 +351,32 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
             logger.info(f"即将停止LLM模型： {model_name}")
 
         if model_name not in available_models:
-            msg = f"the model {model_name} is not available"
-            logger.error(msg)
-            return {"code": 500, "msg": msg}
+            msg = {
+                "简体中文": f"模型 {model_name} 不可用",
+                "English": f"Model {model_name} is not available"
+            }
+            logger.error(msg[language])
+            return {"code": 500, "msg": msg[language]}
 
         worker_address = app._controller.get_worker_address(model_name)
         if not worker_address:
-            msg = f"can not find model_worker address for {model_name}"
-            logger.error(msg)
-            return {"code": 500, "msg": msg}
+            msg = {
+                "简体中文": f"找不到模型 {model_name} 的地址",
+                "English": f"can not find model_worker address for {model_name}"
+            }
+            logger.error(msg[language])
+            return {"code": 500, "msg": msg[language]}
 
         with get_httpx_client() as client:
             r = client.post(worker_address + "/release",
                             json={"new_model_name": new_model_name, "keep_origin": keep_origin})
             if r.status_code != 200:
-                msg = f"failed to release model: {model_name}"
-                logger.error(msg)
-                return {"code": 500, "msg": msg}
+                msg = {
+                    "简体中文": f"释放模型失败：{model_name}",
+                    "English": f"Failed to release model: {model_name}"
+                }
+                logger.error(msg[language])
+                return {"code": 500, "msg": msg[language]}
 
         if new_model_name:
             timer = HTTPX_DEFAULT_TIMEOUT  # wait for new model_worker register
@@ -374,17 +387,26 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
                 time.sleep(1)
                 timer -= 1
             if timer > 0:
-                msg = f"Sucessfully changed model from {model_name} to {new_model_name}"
-                logger.info(msg)
-                return {"code": 200, "msg": msg}
+                msg = {
+                    "简体中文": f"成功从 {model_name} 模型切换到 {new_model_name} 模型",
+                    "English": f"Successfully changed model from {model_name} to {new_model_name}"
+                }
+                logger.info(msg[language])
+                return {"code": 200, "msg": msg[language]}
             else:
-                msg = f"Failed to change model from {model_name} to {new_model_name}"
-                logger.error(msg)
-                return {"code": 500, "msg": msg}
+                msg = {
+                    "简体中文": f"无法将模型从 {model_name} 切换到 {new_model_name}",
+                    "English": f"Failed to change model from {model_name} to {new_model_name}"
+                }
+                logger.error(msg[language])
+                return {"code": 500, "msg": msg[language]}
         else:
-            msg = f"sucess to release model: {model_name}"
-            logger.info(msg)
-            return {"code": 200, "msg": msg}
+            msg = {
+                "简体中文": f"成功停止模型：{model_name}",
+                "English": f"Successfully released model: {model_name}"
+            }
+            logger.info(msg[language])
+            return {"code": 200, "msg": msg[language]}
 
     host = FSCHAT_CONTROLLER["host"]
     port = FSCHAT_CONTROLLER["port"]

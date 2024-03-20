@@ -229,7 +229,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             }
             with st.spinner(indicator[language]):
                 prev_model = st.session_state.get("prev_llm_model")
-                r = api.change_llm_model(prev_model, llm_model)
+                r = api.change_llm_model(prev_model, llm_model, language)
                 if msg := check_error_msg(r):
                     st.error(msg)
                 elif msg := check_success_msg(r):

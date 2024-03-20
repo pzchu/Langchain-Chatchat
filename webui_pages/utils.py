@@ -885,6 +885,7 @@ class ApiRequest:
             self,
             model_name: str,
             new_model_name: str,
+            language: str,
             controller_address: str = None,
     ):
         '''
@@ -920,6 +921,7 @@ class ApiRequest:
             data = {
                 "model_name": model_name,
                 "new_model_name": new_model_name,
+                "language": language,
                 "controller_address": controller_address,
             }
 
@@ -953,6 +955,7 @@ class ApiRequest:
             data = {
                 "model_name": model_name,
                 "new_model_name": new_model_name,
+                "language": language,
                 "controller_address": controller_address,
             }
 
