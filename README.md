@@ -52,7 +52,7 @@ Visit the [Install BigDL-LLM on Windows with Intel GPU](https://bigdl.readthedoc
 ### Download Models
 Download the models to the path you specified in `MODEL_ROOT_PATH` (refer to [Configuration](#configuration) section). 
 
-Currently, only `THUDM/chatglm3-6b` (a Chinese LLM) and `meta-llama/Llama-2-7b-chat-hf` (an English LLM), and `BAAI/bge-large-zh-v1.5` (an embedding model) are supported. Please download the 3 models to `MODEL_ROOT_PATH` and **rename the model folder names as required in the below table.**
+Currently, only `THUDM/chatglm3-6b` (a Chinese LLM) and `meta-llama/Llama-2-7b-chat-hf` (an English LLM), as well as `BAAI/bge-large-zh-v1.5` and `BAAI/bge-large-en-v1.5` (embedding models) are supported. Please download the 4 models to `MODEL_ROOT_PATH` and **rename the model folder names as required in the below table.**
 
 
 | Model | download link | model folder RENAME to |
@@ -60,6 +60,7 @@ Currently, only `THUDM/chatglm3-6b` (a Chinese LLM) and `meta-llama/Llama-2-7b-c
 |`THUDM/chatglm3-6b`| [HF](https://huggingface.co/THUDM/chatglm3-6b) or [ModelScope](https://www.modelscope.cn/models/ZhipuAI/chatglm3-6b/summary) | chatglm3-6b |
 |`meta-llama/Llama-2-7b-chat-hf`| [HF](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) | bigdl-7b-chat-hf |
 |`BAAI/bge-large-zh-v1.5`| [HF](https://huggingface.co/BAAI/bge-large-zh-v1.5) | bge-large-zh-v1.5 |
+|`BAAI/bge-large-en-v1.5`| [HF](https://huggingface.co/BAAI/bge-large-en-v1.5) | bge-large-en-v1.5 |
 
 ## One-time Warm-up
 When you run this applcation on Intel GPU for the first time, it is highly recommended to do a one-time warmup (for GPU kernels compilation). 

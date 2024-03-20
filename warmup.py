@@ -37,7 +37,7 @@ with torch.inference_mode():
         input_ids = tokenizer.encode(prompt, return_tensors="pt").to('xpu')
         output = model.generate(input_ids,
                                 max_new_tokens=32)
-print("-"*20, " Warming-up of LLM chatglm3-6b on MTL iGPU is completed (1/3) ", "-"*20)
+print("-"*20, " Warming-up of LLM chatglm3-6b on MTL iGPU is completed (1/4) ", "-"*20)
 
 model.to('cpu')
 torch.xpu.synchronize()
@@ -65,7 +65,7 @@ with torch.inference_mode():
         input_ids = tokenizer.encode(prompt, return_tensors="pt").to('xpu')
         output = model.generate(input_ids,
                                 max_new_tokens=32)
-print("-"*20, " Warming-up of LLM Llama-2-7b-chat-hf on MTL iGPU is completed (2/3) ", "-"*20)
+print("-"*20, " Warming-up of LLM Llama-2-7b-chat-hf on MTL iGPU is completed (2/4) ", "-"*20)
 
 model.to('cpu')
 torch.xpu.synchronize()
@@ -94,7 +94,36 @@ with torch.inference_mode():
                               return_tensors='pt').to('xpu')
 
     model_output = model(**encoded_input)
-print("-"*20, " Warming-up of embedding model bge-large-zh-v1.5 on MTL iGPU is completed (3/3) ", "-"*20)
+print("-"*20, " Warming-up of embedding model bge-large-zh-v1.5 on MTL iGPU is completed (3/4) ", "-"*20)
+
+model.to('cpu')
+torch.xpu.synchronize()
+torch.xpu.empty_cache()
+del model
+gc.collect()
+
+print("-"*20, " Start warming-up embedding model bge-large-en-v1.5 on MTL iGPU ", "-"*20)
+# Refering: https://huggingface.co/BAAI/bge-large-en-v1.5#using-huggingface-transformers
+model_path = Path(MODEL_ROOT_PATH) / "bge-large-en-v1.5"
+
+model = AutoModel.from_pretrained(model_path,
+                                  load_in_low_bit="fp16",
+                                  optimize_model=True)
+    
+model = model.to('xpu')
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(model_path,
+                                          trust_remote_code=True)
+
+with torch.inference_mode():
+    encoded_input = tokenizer([embedding_warmup_prompt],
+                              padding=True,
+                              truncation=True,
+                              return_tensors='pt').to('xpu')
+
+    model_output = model(**encoded_input)
+print("-"*20, " Warming-up of embedding model bge-large-en-v1.5 on MTL iGPU is completed (4/4) ", "-"*20)
 
 model.to('cpu')
 torch.xpu.synchronize()
