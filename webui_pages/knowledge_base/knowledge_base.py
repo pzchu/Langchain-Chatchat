@@ -281,19 +281,49 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             doc_details["in_folder"] = doc_details["in_folder"].replace(True, "✓").replace(False, "×")
             doc_details["in_db"] = doc_details["in_db"].replace(True, "✓").replace(False, "×")
 
+            doc_details_text = {
+                "No":{
+                    "简体中文":"序号",
+                    "English": "No."
+                },
+                "file_name":{
+                    "简体中文":"文档名称",
+                    "English":"Document Name"
+                },
+                "document_loader":{
+                    "简体中文":"文档加载器",
+                    "English":"Document Loader"
+                },
+                "docs_count":{
+                    "简体中文":"文档数量",
+                    "English":"Document Count"
+                },
+                "text_splitter":{
+                    "简体中文":"分词器",
+                    "English":"Text Splitter"
+                },
+                "in_folder":{
+                    "简体中文":"源文件",
+                    "English":"Source File"
+                },
+                "in_db":{
+                    "简体中文":"向量库",
+                    "English":"Vector Store"
+                }
+            }
             gb = config_aggrid(
                 doc_details,
                 {
-                    ("No", "序号"): {},
-                    ("file_name", "文档名称"): {},
+                    ("No", doc_details_text["No"][language]): {},
+                    ("file_name", doc_details_text["file_name"][language]): {},
                     # ("file_ext", "文档类型"): {},
                     # ("file_version", "文档版本"): {},
-                    ("document_loader", "文档加载器"): {},
-                    ("docs_count", "文档数量"): {},
-                    ("text_splitter", "分词器"): {},
+                    ("document_loader", doc_details_text["document_loader"][language]): {},
+                    ("docs_count", doc_details_text["docs_count"][language]): {},
+                    ("text_splitter", doc_details_text["text_splitter"][language]): {},
                     # ("create_time", "创建时间"): {},
-                    ("in_folder", "源文件"): {"cellRenderer": cell_renderer},
-                    ("in_db", "向量库"): {"cellRenderer": cell_renderer},
+                    ("in_folder", doc_details_text["in_folder"][language]): {"cellRenderer": cell_renderer},
+                    ("in_db", doc_details_text["in_db"][language]): {"cellRenderer": cell_renderer},
                 },
                 "multiple",
             )
