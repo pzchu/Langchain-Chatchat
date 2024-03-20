@@ -378,11 +378,11 @@ def run_controller(log_level: str = "INFO", started_event: mp.Event = None):
                 time.sleep(1)
                 timer -= 1
             if timer > 0:
-                msg = f"sucess change model from {model_name} to {new_model_name}"
+                msg = f"Sucessfully changed model from {model_name} to {new_model_name}"
                 logger.info(msg)
                 return {"code": 200, "msg": msg}
             else:
-                msg = f"failed change model from {model_name} to {new_model_name}"
+                msg = f"Failed to change model from {model_name} to {new_model_name}"
                 logger.error(msg)
                 return {"code": 500, "msg": msg}
         else:
