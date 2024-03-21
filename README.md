@@ -121,7 +121,7 @@ To start chatting with LLMs, simply type your messages in the textbox at the bot
 
 #### Step 2: Chat with RAG
 
-You can now click `Dialogue` to return to the chat UI， and select `Knowledge Base QA` in `Conversation Mode`. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created. Now you can start chatting. 
+You can now click `Dialogue` to return to the chat UI, and select `Knowledge Base QA` in `Conversation Mode`. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created. Now you can start chatting. 
 
 <div style="display:inline-block" align="center">
   <img src="img/rag-menu-1.png" alt="image1" width="30%"><img src="img/rag-menu-2.png" alt="image2" width="50%">
