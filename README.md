@@ -113,9 +113,9 @@ To start chatting with LLMs, simply type your messages in the textbox at the bot
 #### Step 1: Create Knowledge Base
 
 - Select `Manage Knowledge Base` from the menu on the left, then choose `New Knowledge Base` from the dropdown menu on the right side.
-    ![alt text](img/new-kb.png)
+    <img src="img/new-kb.png" alt="image1" height="60%" align="center">
 - Fill in the name of your new knowledge base (example: "test") and press the `Create` button. Adjust any other settings as needed. 
-    ![alt text](img/create-kb.png)
+    <img src="img/create-kb.png" alt="image1" height="30%" align="center">
 - Upload knowledge files from your computer and allow some time for the upload to complete. Once finished, click on `Add files to Knowledge Base` button to build the vector store. Note: this process may take several minutes.
     ![alt text](img/build-kb.png)
 
