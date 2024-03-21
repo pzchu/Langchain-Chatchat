@@ -33,6 +33,7 @@ The following sections introduce how to install and run Langchain-chatchat on **
 2. [One-time Warmup](#one-time-warm-up)
 3. [Start the Service](#start-the-service)
 4. [How to Use](#usage)
+
   
 ## Installation
 
@@ -74,17 +75,17 @@ Visit the [Install BigDL-LLM on Windows with Intel GPU Guide](https://bigdl.read
 - Edit the file `configs\model_config.py`, change `MODEL_ROOT_PATH` to the absolute path where you put the downloaded models (LLMs, embedding models, ranking models, etc.)
 
 ### Download Models
-Download the models to the path you specified in `MODEL_ROOT_PATH` (refer to [Configuration](#configuration) section). 
+Download the models and place them in the path `MODEL_ROOT_PATH` (refer to details in [Configuration](#configuration) section). 
 
-Currently, only `THUDM/chatglm3-6b` (a Chinese LLM) and `meta-llama/Llama-2-7b-chat-hf` (an English LLM), as well as `BAAI/bge-large-zh-v1.5` (chinese embedding model) and `BAAI/bge-large-en-v1.5` (english embedding model) are supported. Please download the 4 models to `MODEL_ROOT_PATH` and **rename the model folder names as required in the below table.**
+Currently, we support only the LLM/embedding models specified in the table below. You can download these models using the link provided in the table. **Note: Ensure the folder name matches the last segment of the model ID following "/", for example, for `THUDM/chatglm3-6b`, the folder name should be `chatglm3-6b`.**
 
 
-| Model | download link | model folder RENAME to |
+| Model |Category| download link | 
 |:--|:--|:--|
-|`THUDM/chatglm3-6b`| [HF](https://huggingface.co/THUDM/chatglm3-6b) or [ModelScope](https://www.modelscope.cn/models/ZhipuAI/chatglm3-6b/summary) | chatglm3-6b |
-|`meta-llama/Llama-2-7b-chat-hf`| [HF](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) | bigdl-7b-chat-hf |
-|`BAAI/bge-large-zh-v1.5`| [HF](https://huggingface.co/BAAI/bge-large-zh-v1.5) | bge-large-zh-v1.5 |
-|`BAAI/bge-large-en-v1.5`| [HF](https://huggingface.co/BAAI/bge-large-en-v1.5) | bge-large-en-v1.5 |
+|`THUDM/chatglm3-6b`|Chinese LLM| [HF](https://huggingface.co/THUDM/chatglm3-6b) or [ModelScope](https://www.modelscope.cn/models/ZhipuAI/chatglm3-6b/summary) |
+|`meta-llama/Llama-2-7b-chat-hf`|English LLM| [HF](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) | 
+|`BAAI/bge-large-zh-v1.5`|Chinese Embedding| [HF](https://huggingface.co/BAAI/bge-large-zh-v1.5) |
+|`BAAI/bge-large-en-v1.5`| English Embedding|[HF](https://huggingface.co/BAAI/bge-large-en-v1.5) |
 
 ## One-time Warm-up
 When you run this applcation on Intel GPU for the first time, it is highly recommended to do a one-time warmup (for GPU kernels compilation). 
