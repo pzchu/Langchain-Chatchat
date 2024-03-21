@@ -28,7 +28,12 @@ This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/ch
 
 The following sections introduce how to install and run Langchain-chatchat on **Intel Core Ultra platform (MTL)**, utilizing the iGPU to run both LLMs and embedding models. 
 
-
+## Table of Contents
+1. [Installation](#installation)
+2. [One-time Warmup](#one-time-warm-up)
+3. [Start the Service](#start-the-service)
+4. [How to Use](#usage)
+  
 ## Installation
 
 ### Download Langchain-Chatchat
