@@ -115,16 +115,16 @@ To start chatting with LLMs, simply type your messages in the textbox at the bot
 - Select `Manage Knowledge Base` from the menu on the left, then choose `New Knowledge Base` from the dropdown menu on the right side.
   <p align="center"><img src="img/new-kb.png" alt="image1" width="70%" align="center"></p>
 - Fill in the name of your new knowledge base (example: "test") and press the `Create` button. Adjust any other settings as needed. 
-  <p align="center"><img src="img/create-kb.png" alt="image1" width="50%" align="center"></p>
+  <p align="center"><img src="img/create-kb.png" alt="image1" width="70%" align="center"></p>
 - Upload knowledge files from your computer and allow some time for the upload to complete. Once finished, click on `Add files to Knowledge Base` button to build the vector store. Note: this process may take several minutes.
-  <p align="center"><img src="img/build-kb.png" alt="image1" width="50%" align="center"></p>
+  <p align="center"><img src="img/build-kb.png" alt="image1" width="70%" align="center"></p>
 
 
 #### Step 2: Chat with RAG
 
 You can now click `Dialogue` on the left-side menu to return to the chat UI. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created, e.g, "test". Now you can start chatting. 
 
-<img src="img/rag-menu.png" alt="rag-menu" width="70%" align="left">
+<img src="img/rag-menu.png" alt="rag-menu" width="60%" align="center">
 
 <br/>
 
