@@ -113,21 +113,22 @@ To start chatting with LLMs, simply type your messages in the textbox at the bot
 #### Step 1: Create Knowledge Base
 
 - Select `Manage Knowledge Base` from the menu on the left, then choose `New Knowledge Base` from the dropdown menu on the right side.
-    <img src="img/new-kb.png" alt="image1" height="60%" align="center">
+  <p align="center"><img src="img/new-kb.png" alt="image1" width="70%" align="center"></p>
 - Fill in the name of your new knowledge base (example: "test") and press the `Create` button. Adjust any other settings as needed. 
-    <img src="img/create-kb.png" alt="image1" height="30%" align="center">
+  <p align="center"><img src="img/create-kb.png" alt="image1" width="50%" align="center"></p>
 - Upload knowledge files from your computer and allow some time for the upload to complete. Once finished, click on `Add files to Knowledge Base` button to build the vector store. Note: this process may take several minutes.
-    ![alt text](img/build-kb.png)
+  <p align="center"><img src="img/build-kb.png" alt="image1" width="50%" align="center"></p>
+
 
 #### Step 2: Chat with RAG
 
 You can now click `Dialogue` on the left-side menu to return to the chat UI. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created, e.g, "test". Now you can start chatting. 
 
-<img src="img/rag-menu.png" alt="image1" height="500" align="center">
+<img src="img/rag-menu.png" alt="rag-menu" width="70%" align="left">
 
 <br/>
 
-For more information about how to use Langchain-Chatchat, refer to Official Quickstart guide in [English README](./README_en.md), or [Chinese README](./README_chs.md), as well as the [Full Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/). 
+For more information about how to use Langchain-Chatchat, refer to Official Quickstart guide in [English](./README_en.md), [Chinese](./README_chs.md), or the [Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/).
 
 
 
