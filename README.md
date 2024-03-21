@@ -124,7 +124,7 @@ To start chatting with LLMs, simply type your messages in the textbox at the bot
 
 You can now click `Dialogue` on the left-side menu to return to the chat UI. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created, e.g, "test". Now you can start chatting. 
 
-<img src="img/rag-menu.png" alt="rag-menu" width="60%" align="center">
+<p align="center"><img src="img/rag-menu.png" alt="rag-menu" width="60%" align="center"></p>
 
 <br/>
 
