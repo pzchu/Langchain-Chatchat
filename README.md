@@ -106,34 +106,29 @@ Open a browser and navigate to the URL to use the Web UI.
 
 ## Usage
 
-To start chatting with LLMs, simply type your messages in the textbox at the bottom of the UI. By default, the conversation mode is `LLM Chat`, which does not involve any external knowledge. 
+To start chatting with LLMs, simply type your messages in the textbox at the bottom of the UI. 
 
 ### How to use RAG
 
 #### Step 1: Create Knowledge Base
 
-- Choose `Manage Knowledge Base` in the left-side menu, and choose `New Knowledge Base` on the right-side in dropdown menu. 
+- Select `Manage Knowledge Base` from the menu on the left, then choose `New Knowledge Base` from the dropdown menu on the right side.
     ![alt text](img/new-kb.png)
-- Fill in the information of the knowledge base, choose embedding model, and click `Create`. 
+- Fill in the name of your new knowledge base (example: "test") and press the `Create` button. Adjust any other settings as needed. 
     ![alt text](img/create-kb.png)
-- Upload knowledge files from your computer, wait some time for the upload to finish, and click `Add files to Knowledge Base` to create the vector store. Note: This may take a few minutes. 
+- Upload knowledge files from your computer and allow some time for the upload to complete. Once finished, click on `Add files to Knowledge Base` button to build the vector store. Note: this process may take several minutes.
     ![alt text](img/build-kb.png)
 
 #### Step 2: Chat with RAG
 
-You can now click `Dialogue` to return to the chat UI, and select `Knowledge Base QA` in `Conversation Mode`. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created. Now you can start chatting. 
+You can now click `Dialogue` on the left-side menu to return to the chat UI. Then in `Knowledge base settings` menu, choose the Knowledge Base you just created, e.g, "test". Now you can start chatting. 
 
-<div style="display:inline-block" align="center">
-  <img src="img/rag-menu-1.png" alt="image1" width="30%"><img src="img/rag-menu-2.png" alt="image2" width="50%">
-</div>
-
+<img src="img/rag-menu.png" alt="image1" height="500" align="center">
 
 <br/>
 
-For more information about how to use Langchain-Chatchat, refer to Official Quickstart guide in [English README](./README_en.md), or [中文文档](./README_chs.md), as well as the [Full Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/). 
+For more information about how to use Langchain-Chatchat, refer to Official Quickstart guide in [English README](./README_en.md), or [Chinese README](./README_chs.md), as well as the [Full Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/). 
 
-
- 
 
 
 
