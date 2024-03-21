@@ -7,6 +7,8 @@ This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/ch
 
 <br/>
 
+
+
 <table width="100%">
   <tr>
     <td align="center" width="50%"><code>English</code></td>
@@ -14,10 +16,10 @@ This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/ch
   </tr>
   <tr>
     <td>
-      <a href="img/bigdl-ui-en-rag.png"><img src="img/bigdl-ui-en-rag.png"></a>
+      <video src="https://github.com/intel-analytics/Langchain-Chatchat/assets/1995599/76227646-6fe9-485e-8f0e-dc96cfe7e2c3" alt="english-video">english</video>
     </td>
     <td>
-      <a href="img/bigdl-ui-chs-rag.png"><img src="img/bigdl-ui-chs-rag.png"></a>
+      <video src="https://github.com/intel-analytics/Langchain-Chatchat/assets/1995599/d11e0c20-74e8-4ff9-9e60-59b184b448c2" alt="chinese-video">english</video>
     </td>
   </tr>
 </table>
