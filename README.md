@@ -77,7 +77,7 @@ Visit the [Install BigDL-LLM on Windows with Intel GPU Guide](https://bigdl.read
 ### Download Models
 Download the models and place them in the path `MODEL_ROOT_PATH` (refer to details in [Configuration](#configuration) section). 
 
-Currently, we support only the LLM/embedding models specified in the table below. You can download these models using the link provided in the table. **Note: Ensure the folder name matches the last segment of the model ID following "/", for example, for `THUDM/chatglm3-6b`, the folder name should be `chatglm3-6b`.**
+Currently, we support only the LLM/embedding models specified in the table below. You can download these models using the link provided in the table. **Note: Ensure the model folder name matches the last segment of the model ID following "/", for example, for `THUDM/chatglm3-6b`, the model folder name should be `chatglm3-6b`.**
 
 
 | Model |Category| download link | 

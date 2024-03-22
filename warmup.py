@@ -17,7 +17,8 @@ Despite all of these advances, however, not everyone was happy with the state of
 Others were more pragmatic, recognizing that,
 """
 
-print("-"*20, " Start warming-up LLM chatglm3-6b on MTL iGPU ", "-"*20)
+print(">> NOTE: The one-time warmup may take several minutes. Please be patient until it finishes warm-up...")
+print("-"*15, " Start warming-up LLM chatglm3-6b on MTL iGPU ", "-"*15)
 model_path = Path(MODEL_ROOT_PATH) / "chatglm3-6b"
 
 model = AutoModel.from_pretrained(model_path,
@@ -37,7 +38,7 @@ with torch.inference_mode():
         input_ids = tokenizer.encode(prompt, return_tensors="pt").to('xpu')
         output = model.generate(input_ids,
                                 max_new_tokens=32)
-print("-"*20, " Warming-up of LLM chatglm3-6b on MTL iGPU is completed (1/4) ", "-"*20)
+print("-"*15, " Warming-up of LLM chatglm3-6b on MTL iGPU is completed (1/4) ", "-"*15)
 
 model.to('cpu')
 torch.xpu.synchronize()
@@ -45,8 +46,8 @@ torch.xpu.empty_cache()
 del model
 gc.collect()
 
-print("-"*20, " Start warming-up LLM Llama-2-7b-chat-hf on MTL iGPU ", "-"*20)
-model_path = Path(MODEL_ROOT_PATH) / "bigdl-7b-chat-hf"
+print("-"*15, " Start warming-up LLM Llama-2-7b-chat-hf on MTL iGPU ", "-"*15)
+model_path = Path(MODEL_ROOT_PATH) / "Llama-2-7b-chat-hf"
 
 model = AutoModelForCausalLM.from_pretrained(model_path,
                                              load_in_4bit=True,
@@ -65,7 +66,7 @@ with torch.inference_mode():
         input_ids = tokenizer.encode(prompt, return_tensors="pt").to('xpu')
         output = model.generate(input_ids,
                                 max_new_tokens=32)
-print("-"*20, " Warming-up of LLM Llama-2-7b-chat-hf on MTL iGPU is completed (2/4) ", "-"*20)
+print("-"*15, " Warming-up of LLM Llama-2-7b-chat-hf on MTL iGPU is completed (2/4) ", "-"*15)
 
 model.to('cpu')
 torch.xpu.synchronize()
@@ -73,7 +74,7 @@ torch.xpu.empty_cache()
 del model
 gc.collect()
 
-print("-"*20, " Start warming-up embedding model bge-large-zh-v1.5 on MTL iGPU ", "-"*20)
+print("-"*15, " Start warming-up embedding model bge-large-zh-v1.5 on MTL iGPU ", "-"*15)
 # Refering: https://huggingface.co/BAAI/bge-large-zh-v1.5#using-huggingface-transformers
 model_path = Path(MODEL_ROOT_PATH) / "bge-large-zh-v1.5"
 
@@ -94,7 +95,7 @@ with torch.inference_mode():
                               return_tensors='pt').to('xpu')
 
     model_output = model(**encoded_input)
-print("-"*20, " Warming-up of embedding model bge-large-zh-v1.5 on MTL iGPU is completed (3/4) ", "-"*20)
+print("-"*15, " Warming-up of embedding model bge-large-zh-v1.5 on MTL iGPU is completed (3/4) ", "-"*15)
 
 model.to('cpu')
 torch.xpu.synchronize()
@@ -102,7 +103,7 @@ torch.xpu.empty_cache()
 del model
 gc.collect()
 
-print("-"*20, " Start warming-up embedding model bge-large-en-v1.5 on MTL iGPU ", "-"*20)
+print("-"*15, " Start warming-up embedding model bge-large-en-v1.5 on MTL iGPU ", "-"*15)
 # Refering: https://huggingface.co/BAAI/bge-large-en-v1.5#using-huggingface-transformers
 model_path = Path(MODEL_ROOT_PATH) / "bge-large-en-v1.5"
 
@@ -123,7 +124,7 @@ with torch.inference_mode():
                               return_tensors='pt').to('xpu')
 
     model_output = model(**encoded_input)
-print("-"*20, " Warming-up of embedding model bge-large-en-v1.5 on MTL iGPU is completed (4/4) ", "-"*20)
+print("-"*15, " Warming-up of embedding model bge-large-en-v1.5 on MTL iGPU is completed (4/4) ", "-"*15)
 
 model.to('cpu')
 torch.xpu.synchronize()

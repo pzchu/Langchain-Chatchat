@@ -173,12 +173,9 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
         else:
             from fastchat.serve.model_worker import GptqConfig, AWQConfig, worker_id
             if args.device in ['xpu']:
-                from bigdl.llm.serving.bigdl_llm_model import patch_fastchat
-                patch_fastchat()
-
                 from bigdl.llm.serving.model_worker import app, ModelWorker
             else:
-                from fastchat.serve.model_worker import app, ModelWorker
+                from bigdl.llm.serving.fastchat.bigdl_worker import app, BigDLLLMWorker
 
             args.gpus = "0"  # GPU的编号,如果有多个GPU，可以设置为"0,1,2,3"
             args.max_gpu_memory = "22GiB"
@@ -222,29 +219,23 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
             )
 
             if args.device in ['xpu']:
-                worker = ModelWorker(
+                worker = BigDLLLMWorker(
                     controller_addr=args.controller_address,
                     worker_addr=args.worker_address,
                     worker_id=worker_id,
                     model_path=args.model_path,
                     model_names=args.model_names,
                     limit_worker_concurrency=args.limit_worker_concurrency,
-                    no_register=args.no_register,
-                    device=args.device,
-                    num_gpus=args.num_gpus,
-                    max_gpu_memory=args.max_gpu_memory,
-                    load_8bit=args.load_8bit,
-                    cpu_offloading=args.cpu_offloading,
-                    gptq_config=gptq_config,
-                    awq_config=awq_config,
-                    stream_interval=args.stream_interval,
                     conv_template=args.conv_template,
-                    # embed_in_truncate=args.embed_in_truncate, # currently not supported in bigdl-llm's model worker
+                    load_in_low_bit="sym_int4",
+                    device=args.device,
+                    no_register=args.no_register,
+                    trust_remote_code=True,
+                    stream_interval=args.stream_interval,
                 )
-                sys.modules["bigdl.llm.serving.model_worker"].args = args
-                sys.modules["bigdl.llm.serving.model_worker"].gptq_config = gptq_config
-                sys.modules["bigdl.llm.serving.model_worker"].worker = worker
-                sys.modules["bigdl.llm.serving.model_worker"].logger.setLevel(log_level)
+                sys.modules["bigdl.llm.serving.fastchat.bigdl_worker"].args = args
+                sys.modules["bigdl.llm.serving.fastchat.bigdl_worker"].worker = worker
+                sys.modules["bigdl.llm.serving.fastchat.bigdl_worker"].logger.setLevel(log_level)
             else:
                 worker = ModelWorker(
                     controller_addr=args.controller_address,
