@@ -1,6 +1,6 @@
 # Langchain-Chatchat with BigDL-LLM Acceleration on Intel GPUs
 
-*Langchain-Chatchat* is a RAG (Retrieval Augmented Generation) application that implements knowledge and search engine based QA. This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat), and includes [BigDL-LLM](https://github.com/intel-analytics/bigdl) optimizations to run it on **Intel GPU** (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max). 
+*Langchain-Chatchat* is a **RAG** (Retrieval Augmented Generation) application that implements knowledge and search engine based QA. This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat), and includes [BigDL-LLM](https://github.com/intel-analytics/bigdl) optimizations to run it on **Intel GPU** (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max). 
 >You can change the UI language in the left-side menu. We currently support **English** and **简体中文** (see video demos below). 
 
 <br/>
@@ -31,10 +31,9 @@ The following sections introduce how to install and run Langchain-chatchat on **
 4. [Start the Service](#start-the-service)
 5. [How to Use](#usage)
 
-
 ## Langchain-Chatchat Architecture
 
-See the RAG pipeline in the Langchain-Chatchat architecture below.
+See the RAG pipeline in the Langchain-Chatchat architecture below ([source](https://github.com/chatchat-space/Langchain-Chatchat/blob/master/img/langchain%2Bchatglm.png)).
 
 <img src="https://github.com/chatchat-space/Langchain-Chatchat/blob/master/img/langchain%2Bchatglm.png" height="350px">
   
