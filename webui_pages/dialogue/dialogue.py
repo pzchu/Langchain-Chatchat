@@ -258,8 +258,8 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
 
         def prompt_change():
             indicator = {
-                "简体中文":f"已切换为 {prompt_template_name} 模板。",
-                "English":f"Switched to {prompt_template_name} template. "
+                "简体中文":f"已切换为 {st.session_state.prompt_template_select} 模板。",
+                "English":f"Switched to {st.session_state.prompt_template_select} template. "
             }
             text = indicator[language]
             st.toast(text)
