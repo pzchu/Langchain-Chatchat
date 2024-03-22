@@ -7,8 +7,8 @@
 
 <table width="100%">
   <tr>
-    <td align="center" width="50%"><code>English</code></td>
-    <td align="center" width="50%"><code>简体中文</code></td>
+    <td align="center" width="50%"><b>English</b></td>
+    <td align="center" width="50%"><b>简体中文</b></td>
   </tr>
   <tr>
     <td>
@@ -30,6 +30,7 @@ The following sections introduce how to install and run Langchain-chatchat on **
 3. [One-time Warmup](#one-time-warm-up)
 4. [Start the Service](#start-the-service)
 5. [How to Use](#usage)
+6. [Trouble Shooting & Tips](#trouble-shooting--tips)
 
 ## Langchain-Chatchat Architecture
 
@@ -49,25 +50,27 @@ Visit the [Install BigDL-LLM on Windows with Intel GPU Guide](https://bigdl.read
 
 ### Install Python Dependencies
 
-1.  Open **Anaconda Prompt (miniconda3)**, and run the following commands to create a new python environment:
-    ```cmd
-    conda create -n bigdl-langchain-chatchat python=3.11 libuv 
-    conda activate bigdl-langchain-chatchat
-    ```
-    > **Note**: When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install BigDL-LLM on Windows with Intel GPU](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
-    > 
-2.  Install `bigdl-llm` 
+#### 1. Create a Conda Environment
+Open **Anaconda Prompt (miniconda3)**, and run the following commands to create a new python environment:
+  ```cmd
+  conda create -n bigdl-langchain-chatchat python=3.11 libuv 
+  conda activate bigdl-langchain-chatchat
+  ```
+  > **Note**: When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install BigDL-LLM on Windows with Intel GPU](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
+  > 
+#### 2.  Install `bigdl-llm` 
     ```cmd
     pip install --pre --upgrade bigdl-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
     pip install --pre --upgrade torchaudio==2.1.0a0  -f https://developer.intel.com/ipex-whl-stable-xpu
     ```
-3. Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `C:\Users\arda\Downloads\Langchain-Chatchat-bigdl-llm`. Remember to change it to your own path**).
-    ```cmd
-    cd C:\Users\arda\Downloads\Langchain-Chatchat-bigdl-llm
-    pip install -r requirements_bigdl.txt 
-    pip install -r requirements_api_bigdl.txt
-    pip install -r requirements_webui.txt
-    ```
+#### 3. Install Langchain-Chatchat Dependencies 
+Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `C:\Users\arda\Downloads\Langchain-Chatchat-bigdl-llm`. Remember to change it to your own path**).
+  ```cmd
+  cd C:\Users\arda\Downloads\Langchain-Chatchat-bigdl-llm
+  pip install -r requirements_bigdl.txt 
+  pip install -r requirements_api_bigdl.txt
+  pip install -r requirements_webui.txt
+  ```
 
 ### Configuration
 -  In root directory of Langchain-Chatchat, run the following command to create a config:
@@ -142,6 +145,14 @@ For more information about how to use Langchain-Chatchat, refer to Official Quic
 
 
 
+### Trouble Shooting & Tips
 
+#### 1. Version Compatibility
+
+Ensure that you have installed versions of `bigdl-llm` and `bigdl-core-xe-21` that are greater than **2.5.0b20240321**. You can run `pip list | grep bigdl` to check the verisons. To upgrade, follow the [installation instructions](#2-install-bigdl-llm) above.
+
+#### 2. Prompt Templates
+
+In the left-side menu, you have the option to choose a prompt template. There're several pre-defined templates - those ending with '_cn' are Chinese templates, and those ending with '_en' are English templates. You can also define your own prompt templates in `configs/prompt_config.py`. Remember to restart the service to enable these changes. 
 
 
