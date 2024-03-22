@@ -150,7 +150,7 @@ async def file_chat(query: str = Body(..., description="用户输入", examples=
         source_documents = []
         for inum, doc in enumerate(docs):
             filename = doc.metadata.get("source")
-            text = f"""出处 [{inum + 1}] [{filename}] \n\n{doc.page_content}\n\n"""
+            text = f"""Reference [{inum + 1}] [{filename}] \n\n{doc.page_content}\n\n"""
             source_documents.append(text)
 
         if len(source_documents) == 0: # 没有找到相关文档

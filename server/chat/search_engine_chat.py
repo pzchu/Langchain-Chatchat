@@ -178,7 +178,7 @@ async def search_engine_chat(query: str = Body(..., description="用户输入", 
         )
 
         source_documents = [
-            f"""出处 [{inum + 1}] [{doc.metadata["source"]}]({doc.metadata["source"]}) \n\n{doc.page_content}\n\n"""
+            f"""Reference [{inum + 1}] [{doc.metadata["source"]}]({doc.metadata["source"]}) \n\n{doc.page_content}\n\n"""
             for inum, doc in enumerate(docs)
         ]
 
