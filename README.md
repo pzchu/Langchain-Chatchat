@@ -60,7 +60,6 @@ Open **Anaconda Prompt (miniconda3)**, and run the following commands to create 
   > [!NOTE]
   > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install BigDL-LLM on Windows with Intel GPU](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
 
-
 #### 2.  Install `bigdl-llm` 
   ```cmd
   pip install --pre --upgrade bigdl-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
