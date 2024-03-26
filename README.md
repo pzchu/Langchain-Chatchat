@@ -101,7 +101,7 @@ When you run this applcation on Intel GPU for the first time, it is highly recom
 In **Anaconda Prompt (miniconda3)**, under the root directory of Langchain-Chatchat, with conda environment activated, run the following commands:
 
 ```cmd
-conda activate bigdl-langchain-chatchat
+conda activate ipex-llm-langchain-chatchat
 call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
 set SYCL_CACHE_PERSISTENT=1
 set BIGDL_LLM_XMX_DISABLED=1
