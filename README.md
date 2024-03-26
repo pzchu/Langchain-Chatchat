@@ -1,6 +1,6 @@
 # Langchain-Chatchat with IPEX-LLM Acceleration on Intel GPUs
 
-*Langchain-Chatchat* is a **RAG** (Retrieval Augmented Generation) application that implements knowledge and search engine based QA. This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat), and includes [IPEX-LLM](https://github.com/intel-analytics/ipex-llm) optimizations to run it on **Intel GPU** (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max). If you have any issues or suggestions, please submit them to the [Ipex-LLM Project](https://github.com/intel-analytics/ipex-llm/issues).
+*Langchain-Chatchat* is a **RAG** (Retrieval Augmented Generation) application that implements knowledge and search engine based QA. This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat), and includes [IPEX-LLM](https://github.com/intel-analytics/ipex-llm) optimizations to run it on **Intel GPU** (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max). If you have any issues or suggestions, please submit them to the [IPEX-LLM Project](https://github.com/intel-analytics/ipex-llm/issues).
 >You can change the UI language in the left-side menu. We currently support **English** and **简体中文** (see video demos below). 
 
 <br/>
