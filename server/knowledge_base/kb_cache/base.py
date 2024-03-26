@@ -144,7 +144,7 @@ class EmbeddingsPool(CachePool):
                         # maybe ReRanker or else, just use empty string instead
                         query_instruction = ""
                     if device in ['xpu']:
-                        from bigdl.llm.langchain.embeddings import TransformersBgeEmbeddings
+                        from ipex_llm.langchain.embeddings import TransformersBgeEmbeddings
                         embeddings = TransformersBgeEmbeddings.from_model_id(model_id=get_model_path(model),
                                                                              model_kwargs={'load_in_low_bit':"fp16"},
                                                                              device_map=device)
