@@ -149,7 +149,7 @@ For more information about how to use Langchain-Chatchat, refer to Official Quic
 
 #### 1. Version Compatibility
 
-Ensure that you have installed versions of `bigdl-llm` and `bigdl-core-xe-21` that are greater than **2.5.0b20240321**. You can run `pip list | grep bigdl` to check the verisons. To upgrade, follow the [installation instructions](#2--install-bigdl-llm) above.
+Ensure that you have installed versions of `bigdl-llm` and `bigdl-core-xe-21` that are greater than or equal to **2.5.0b20240321**. To upgrade, follow the [installation instructions](#2--install-bigdl-llm) above.
 
 #### 2. Prompt Templates
 
