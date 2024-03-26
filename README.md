@@ -56,8 +56,11 @@ Open **Anaconda Prompt (miniconda3)**, and run the following commands to create 
   conda create -n bigdl-langchain-chatchat python=3.11 libuv 
   conda activate bigdl-langchain-chatchat
   ```
-  > **Note**: When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install BigDL-LLM on Windows with Intel GPU](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
-  > 
+
+  > [!NOTE]
+  > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install BigDL-LLM on Windows with Intel GPU](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
+
+
 #### 2.  Install `bigdl-llm` 
   ```cmd
   pip install --pre --upgrade bigdl-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
@@ -105,18 +108,23 @@ set BIGDL_LLM_XMX_DISABLED=1
 python warmup.py
 ```
 
-> **Note**: The warmup may take several minutes. You just have to run it one-time on after installation. 
+> [!NOTE]
+> The warmup may take several minutes. You just have to run it one-time on after installation. 
 
 ## Start the Service
 Open **Anaconda Prompt (miniconda3)** and run the following commands:
 ```cmd
 conda activate bigdl-langchain-chatchat
-call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" --force
+call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
 set SYCL_CACHE_PERSISTENT=1
 set BIGDL_LLM_XMX_DISABLED=1
 set no_proxy=localhost,127.0.0.1
 python startup.py -a
 ```
+
+> [!NOTE]
+> Please skip the `call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"` step if you have done that during [one-time warmup](#one-time-warm-up)
+
 You can find the Web UI's URL printted on the terminal logs, e.g. http://localhost:8501/.
 
 Open a browser and navigate to the URL to use the Web UI. 
