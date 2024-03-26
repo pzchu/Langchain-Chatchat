@@ -1,6 +1,6 @@
-# Langchain-Chatchat with BigDL-LLM Acceleration on Intel GPUs
+# Langchain-Chatchat with IPEX-LLM Acceleration on Intel GPUs
 
-*Langchain-Chatchat* is a **RAG** (Retrieval Augmented Generation) application that implements knowledge and search engine based QA. This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat), and includes [BigDL-LLM](https://github.com/intel-analytics/bigdl) optimizations to run it on **Intel GPU** (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max). 
+*Langchain-Chatchat* is a **RAG** (Retrieval Augmented Generation) application that implements knowledge and search engine based QA. This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat), and includes [IPEX-LLM](https://github.com/intel-analytics/ipex-llm) optimizations to run it on **Intel GPU** (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max). 
 >You can change the UI language in the left-side menu. We currently support **English** and **简体中文** (see video demos below). 
 
 <br/>
@@ -42,35 +42,36 @@ See the RAG pipeline in the Langchain-Chatchat architecture below ([source](http
 
 ### Download Langchain-Chatchat
 
-Download the Langchain-Chatchat with BigDL-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/bigdl-llm.zip). Unzip the content into a directory, e.g.,`C:\Users\arda\Downloads\Langchain-Chatchat-bigdl-llm`. 
+Download the Langchain-Chatchat with IPEX-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/ipex-llm.zip). Unzip the content into a directory, e.g.,`C:\Users\arda\Downloads\Langchain-Chatchat-ipex-llm`. 
 
 ### Install Prerequisites
 
-Visit the [Install BigDL-LLM on Windows with Intel GPU Guide](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html), and follow [**Install Prerequisites**](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html#install-prerequisites) to install Visual Studio, GPU driver, oneAPI, and Conda.  
+Visit the [Install IPEX-LLM on Windows with Intel GPU Guide](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html), and follow [**Install Prerequisites**](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html#install-prerequisites) to install Visual Studio, GPU driver, oneAPI, and Conda.  
 
 ### Install Python Dependencies
 
 #### 1. Create a Conda Environment
 Open **Anaconda Prompt (miniconda3)**, and run the following commands to create a new python environment:
   ```cmd
-  conda create -n bigdl-langchain-chatchat python=3.11 libuv 
-  conda activate bigdl-langchain-chatchat
+  conda create -n ipex-llm-langchain-chatchat python=3.11 libuv 
+  conda activate ipex-llm-langchain-chatchat
   ```
 
   > [!NOTE]
-  > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install BigDL-LLM on Windows with Intel GPU](https://bigdl.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
+  > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install IPEX-LLM on Windows with Intel GPU](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
 
-#### 2.  Install `bigdl-llm` 
+
+#### 2.  Install `ipex-llm` 
   ```cmd
-  pip install --pre --upgrade bigdl-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
+  pip install --pre --upgrade ipex-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
   pip install --pre --upgrade torchaudio==2.1.0a0  -f https://developer.intel.com/ipex-whl-stable-xpu
   ```
 #### 3. Install Langchain-Chatchat Dependencies 
-Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `C:\Users\arda\Downloads\Langchain-Chatchat-bigdl-llm`. Remember to change it to your own path**).
+Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `C:\Users\arda\Downloads\Langchain-Chatchat-ipex-llm`. Remember to change it to your own path**).
   ```cmd
-  cd C:\Users\arda\Downloads\Langchain-Chatchat-bigdl-llm
-  pip install -r requirements_bigdl.txt 
-  pip install -r requirements_api_bigdl.txt
+  cd C:\Users\arda\Downloads\Langchain-Chatchat-ipex-llm
+  pip install -r requirements_ipex_llm.txt 
+  pip install -r requirements_api_ipex_llm.txt
   pip install -r requirements_webui.txt
   ```
 
@@ -100,7 +101,7 @@ When you run this applcation on Intel GPU for the first time, it is highly recom
 In **Anaconda Prompt (miniconda3)**, under the root directory of Langchain-Chatchat, with conda environment activated, run the following commands:
 
 ```cmd
-conda activate bigdl-langchain-chatchat
+conda activate ipex-llm-langchain-chatchat
 call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
 set SYCL_CACHE_PERSISTENT=1
 set BIGDL_LLM_XMX_DISABLED=1
@@ -113,7 +114,7 @@ python warmup.py
 ## Start the Service
 Open **Anaconda Prompt (miniconda3)** and run the following commands:
 ```cmd
-conda activate bigdl-langchain-chatchat
+conda activate ipex-llm-langchain-chatchat
 call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
 set SYCL_CACHE_PERSISTENT=1
 set BIGDL_LLM_XMX_DISABLED=1
@@ -160,7 +161,7 @@ For more information about how to use Langchain-Chatchat, refer to Official Quic
 
 #### 1. Version Compatibility
 
-Ensure that you have installed versions of `bigdl-llm` and `bigdl-core-xe-21` that are greater than or equal to **2.5.0b20240321**. To upgrade, follow the [installation instructions](#2--install-bigdl-llm) above.
+Ensure that you have installed versions of `ipex-llm` and `bigdl-core-xe-21` that are greater than or equal to **2.1.0b20240321**. To upgrade, follow the [installation instructions](#2--install-ipex-llm) above.
 
 #### 2. Prompt Templates
 

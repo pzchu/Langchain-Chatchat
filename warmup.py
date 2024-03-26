@@ -2,7 +2,7 @@ import torch
 import gc
 from pathlib import Path
 
-from bigdl.llm.transformers import AutoModel, AutoModelForCausalLM
+from ipex_llm.transformers import AutoModel, AutoModelForCausalLM
 from transformers import AutoTokenizer, LlamaTokenizer
 
 from configs.model_config import MODEL_ROOT_PATH
