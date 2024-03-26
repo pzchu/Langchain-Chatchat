@@ -98,16 +98,20 @@ When you run this applcation on Intel GPU for the first time, it is highly recom
 In **Anaconda Prompt (miniconda3)**, under the root directory of Langchain-Chatchat, with conda environment activated, run the following commands:
 
 ```cmd
+conda activate bigdl-langchain-chatchat
+call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
+set SYCL_CACHE_PERSISTENT=1
+set BIGDL_LLM_XMX_DISABLED=1
 python warmup.py
 ```
 
 > **Note**: The warmup may take several minutes. You just have to run it one-time on after installation. 
 
 ## Start the Service
- Open **Anaconda Prompt (miniconda3)** and run the following commands:
+Open **Anaconda Prompt (miniconda3)** and run the following commands:
 ```cmd
 conda activate bigdl-langchain-chatchat
-call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
+call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat" --force
 set SYCL_CACHE_PERSISTENT=1
 set BIGDL_LLM_XMX_DISABLED=1
 set no_proxy=localhost,127.0.0.1
