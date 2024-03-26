@@ -56,7 +56,7 @@ Open **Anaconda Prompt (miniconda3)**, and run the following commands to create 
   conda create -n ipex-llm-langchain-chatchat python=3.11 libuv 
   conda activate ipex-llm-langchain-chatchat
   ```
-  
+
   > [!NOTE]
   > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install IPEX-LLM on Windows with Intel GPU](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
 
