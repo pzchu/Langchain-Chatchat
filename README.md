@@ -122,7 +122,7 @@ python startup.py -a
 ```
 
 > [!NOTE]
-> Please skip the `call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"` step if you have done that during [one-time warmup](#one-time-warm-up)
+> Please skip the `call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"` step if you have done that during [one-time warmup](#one-time-warm-up).
 
 You can find the Web UI's URL printted on the terminal logs, e.g. http://localhost:8501/.
 
