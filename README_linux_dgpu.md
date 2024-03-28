@@ -2,7 +2,7 @@
 
 ### Download Langchain-Chatchat
 
-Download the Langchain-Chatchat with IPEX-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/ipex-llm.zip). Unzip the content into a directory, e.g. `/home/usr/Langchain-Chatchat-ipex-llm`. 
+Download the Langchain-Chatchat with IPEX-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/ipex-llm.zip). Unzip the content into a directory, e.g. `/home/arda/Langchain-Chatchat-ipex-llm`. 
 
 ### Install Prerequisites
 
@@ -27,9 +27,9 @@ Run the following commands to create a new python environment:
   pip install --pre --upgrade torchaudio==2.1.0a0  -f https://developer.intel.com/ipex-whl-stable-xpu
   ```
 #### 3. Install Langchain-Chatchat Dependencies 
-Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `/home/usr/Langchain-Chatchat-ipex-llm`. Remember to change it to your own path**).
+Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `/home/arda/Langchain-Chatchat-ipex-llm`. Remember to change it to your own path**).
   ```cmd
-  cd /home/usr/Langchain-Chatchat-ipex-llm
+  cd /home/arda/Langchain-Chatchat-ipex-llm
   pip install -r requirements_ipex_llm.txt 
   pip install -r requirements_api_ipex_llm.txt
   pip install -r requirements_webui.txt
@@ -56,7 +56,7 @@ Currently, we support only the LLM/embedding models specified in the table below
 |`BAAI/bge-large-en-v1.5`| English Embedding|[HF](https://huggingface.co/BAAI/bge-large-en-v1.5) |
 
 ## Start the Service
-Run the following commands on **Intel Arc™ A-Series Graphics** with the exception of Intel Arc™ A300-Series or Pro A60:
+Run the following commands:
 ```cmd
 conda activate ipex-llm-langchain-chatchat
 
@@ -72,6 +72,8 @@ export BIGDL_IMPORT_IPEX=0
 
 python startup.py -a
 ```
+>[!Note]
+> The above configurations lead to optimal performance for **Intel Arc™ A-Series Graphics** with the exception of Intel Arc™ A300-Series or Pro A60.
 
 You can find the Web UI's URL printted on the terminal logs, e.g. http://localhost:8501/.
 
