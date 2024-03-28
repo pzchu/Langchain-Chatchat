@@ -12,7 +12,7 @@ Visit the [Install IPEX-LLM on Linux with Intel GPU Guide](https://ipex-llm.read
 
 #### 1. Create a Conda Environment
 Run the following commands to create a new python environment:
-  ```cmd
+  ```bash
   conda create -n ipex-llm-langchain-chatchat python=3.11
   conda activate ipex-llm-langchain-chatchat
   ```
@@ -22,13 +22,13 @@ Run the following commands to create a new python environment:
 
 
 #### 2.  Install `ipex-llm` 
-  ```cmd
+  ```bash
   pip install --pre --upgrade ipex-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
   pip install --pre --upgrade torchaudio==2.1.0a0  -f https://developer.intel.com/ipex-whl-stable-xpu
   ```
 #### 3. Install Langchain-Chatchat Dependencies 
 Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `/home/arda/Langchain-Chatchat-ipex-llm`. Remember to change it to your own path**).
-  ```cmd
+  ```bash
   cd /home/arda/Langchain-Chatchat-ipex-llm
   pip install -r requirements_ipex_llm.txt 
   pip install -r requirements_api_ipex_llm.txt
@@ -57,7 +57,7 @@ Currently, we support only the LLM/embedding models specified in the table below
 
 ## Start the Service
 Run the following commands:
-```cmd
+```bash
 conda activate ipex-llm-langchain-chatchat
 
 source /opt/intel/oneapi/setvars.sh
