@@ -22,15 +22,14 @@
 
 <br/>
 
-The following sections introduce how to install and run Langchain-chatchat on **Intel Core Ultra platform (MTL)**, utilizing the iGPU to run both LLMs and embedding models. 
+The following sections introduce how to install and run Langchain-chatchat on **Intel Arc™ A-Series Graphics**, utilizing the dGPU to run both LLMs and embedding models. 
 
 ## Table of Contents
 1. [RAG Architecture](#langchain-chatchat-architecture)
 2. [Installation](#installation)
-3. [One-time Warmup](#one-time-warm-up)
-4. [Start the Service](#start-the-service)
-5. [How to Use](#usage)
-6. [Trouble Shooting & Tips](#trouble-shooting--tips)
+3. [Start the Service](#start-the-service)
+4. [How to Use](#usage)
+5. [Trouble Shooting & Tips](#trouble-shooting--tips)
 
 ## Langchain-Chatchat Architecture
 
@@ -42,23 +41,23 @@ See the RAG pipeline in the Langchain-Chatchat architecture below ([source](http
 
 ### Download Langchain-Chatchat
 
-Download the Langchain-Chatchat with IPEX-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/ipex-llm.zip). Unzip the content into a directory, e.g.,`C:\Users\arda\Downloads\Langchain-Chatchat-ipex-llm`. 
+Download the Langchain-Chatchat with IPEX-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/ipex-llm.zip). Unzip the content into a directory, e.g. `/home/usr/Langchain-Chatchat-ipex-llm`. 
 
 ### Install Prerequisites
 
-Visit the [Install IPEX-LLM on Windows with Intel GPU Guide](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html), and follow [**Install Prerequisites**](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html#install-prerequisites) to install Visual Studio, GPU driver, oneAPI, and Conda.  
+Visit the [Install IPEX-LLM on Linux with Intel GPU Guide](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_linux_gpu.html), and follow [**Install Prerequisites**](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_linux_gpu.html#install-prerequisites) to install GPU driver, oneAPI, and Conda.  
 
 ### Install Python Dependencies
 
 #### 1. Create a Conda Environment
-Open **Anaconda Prompt (miniconda3)**, and run the following commands to create a new python environment:
+Run the following commands to create a new python environment:
   ```cmd
-  conda create -n ipex-llm-langchain-chatchat python=3.11 libuv 
+  conda create -n ipex-llm-langchain-chatchat python=3.11
   conda activate ipex-llm-langchain-chatchat
   ```
 
   > [!NOTE]
-  > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install IPEX-LLM on Windows with Intel GPU](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
+  > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install IPEX-LLM on Linux with Intel GPU Guide](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_linux_gpu.html)
 
 
 #### 2.  Install `ipex-llm` 
@@ -67,9 +66,9 @@ Open **Anaconda Prompt (miniconda3)**, and run the following commands to create 
   pip install --pre --upgrade torchaudio==2.1.0a0  -f https://developer.intel.com/ipex-whl-stable-xpu
   ```
 #### 3. Install Langchain-Chatchat Dependencies 
-Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `C:\Users\arda\Downloads\Langchain-Chatchat-ipex-llm`. Remember to change it to your own path**).
+Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `/home/usr/Langchain-Chatchat-ipex-llm`. Remember to change it to your own path**).
   ```cmd
-  cd C:\Users\arda\Downloads\Langchain-Chatchat-ipex-llm
+  cd /home/usr/Langchain-Chatchat-ipex-llm
   pip install -r requirements_ipex_llm.txt 
   pip install -r requirements_api_ipex_llm.txt
   pip install -r requirements_webui.txt
@@ -80,7 +79,7 @@ Switch to the root directory of Langchain-Chatchat you've downloaded (refer to t
     ```bash
     python copy_config_example.py
     ```
-- Edit the file `configs\model_config.py`, change `MODEL_ROOT_PATH` to the absolute path of the parent directory where all the downloaded models (LLMs, embedding models, ranking models, etc.) are stored.
+- Edit the file `configs/model_config.py`, change `MODEL_ROOT_PATH` to the absolute path of the parent directory where all the downloaded models (LLMs, embedding models, ranking models, etc.) are stored.
 
 ### Download Models
 Download the models and place them in the directory `MODEL_ROOT_PATH` (refer to details in [Configuration](#configuration) section). 
@@ -95,41 +94,23 @@ Currently, we support only the LLM/embedding models specified in the table below
 |`BAAI/bge-large-zh-v1.5`|Chinese Embedding| [HF](https://huggingface.co/BAAI/bge-large-zh-v1.5) |
 |`BAAI/bge-large-en-v1.5`| English Embedding|[HF](https://huggingface.co/BAAI/bge-large-en-v1.5) |
 
-## One-time Warm-up
-When you run this applcation on Intel GPU for the first time, it is highly recommended to do a one-time warmup (for GPU kernels compilation). 
-
-In **Anaconda Prompt (miniconda3)**, under the root directory of Langchain-Chatchat, with conda environment activated, run the following commands:
-
-```cmd
-conda activate ipex-llm-langchain-chatchat
-
-call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
-set SYCL_CACHE_PERSISTENT=1
-set BIGDL_LLM_XMX_DISABLED=1
-
-python warmup.py
-```
-
-> [!NOTE]
-> The warmup may take several minutes. You just have to run it one-time on after installation. 
-
 ## Start the Service
-Open **Anaconda Prompt (miniconda3)** and run the following commands:
+Run the following commands on **Intel Arc™ A-Series Graphics** with the exception of Intel Arc™ A300-Series or Pro A60:
 ```cmd
 conda activate ipex-llm-langchain-chatchat
 
-call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
-set SYCL_CACHE_PERSISTENT=1
-set BIGDL_LLM_XMX_DISABLED=1
+source /opt/intel/oneapi/setvars.sh
+export USE_XETLA=OFF
+export SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=1
+export SYCL_CACHE_PERSISTENT=1
+export BIGDL_QUANTIZE_KV_CACHE=1
+export BIGDL_LLM_XMX_DISABLED=1
 
-set BIGDL_IMPORT_IPEX=0
-set no_proxy=localhost,127.0.0.1
+export no_proxy='localhost,127.0.0.1'
+export BIGDL_IMPORT_IPEX=0
 
 python startup.py -a
 ```
-
-> [!NOTE]
-> Please skip the `call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"` step if you have done that during [one-time warmup](#one-time-warm-up).
 
 You can find the Web UI's URL printted on the terminal logs, e.g. http://localhost:8501/.
 
