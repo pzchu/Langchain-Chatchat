@@ -1,6 +1,8 @@
+***This application (Knowledge Base QA using RAG pipeline) is ported from [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat) to run on Intel GPU (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max) using [IPEX-LLM](https://github.com/intel-analytics/ipex-llm).***
+
 # Langchain-Chatchat with IPEX-LLM Acceleration on Intel GPUs
 
-*Langchain-Chatchat* is a **RAG** (Retrieval Augmented Generation) application that implements knowledge and search engine based QA. This repo is a fork of [chatchat-space/Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat), and includes [IPEX-LLM](https://github.com/intel-analytics/ipex-llm) optimizations to run it on **Intel GPU** (e.g., local PC with iGPU, discrete GPU such as Arc, Flex and Max). If you have any issues or suggestions, please submit them to the [IPEX-LLM Project](https://github.com/intel-analytics/ipex-llm/issues).
+See the demo of running `Langchain-Chatchat` (Knowledge Base QA using RAG pipeline) on Intel Core Ultra using `ipex-llm` below. If you have any issues or suggestions, please submit them to the [IPEX-LLM Project](https://github.com/intel-analytics/ipex-llm/issues).
 >You can change the UI language in the left-side menu. We currently support **English** and **简体中文** (see video demos below). 
 
 <br/>
@@ -25,7 +27,7 @@
 The following sections introduce how to install and run Langchain-chatchat on **Intel Core Ultra platform (MTL)**, utilizing the iGPU to run both LLMs and embedding models. 
 
 ## Table of Contents
-1. [RAG Architecture](#langchain-chatchat-architecture)
+1. [LangChain-Chatchat Architecture](#langchain-chatchat-architecture)
 2. [Installation](#installation)
 3. [One-time Warmup](#one-time-warm-up)
 4. [Start the Service](#start-the-service)
@@ -34,9 +36,9 @@ The following sections introduce how to install and run Langchain-chatchat on **
 
 ## Langchain-Chatchat Architecture
 
-See the RAG pipeline in the Langchain-Chatchat architecture below ([source](https://github.com/chatchat-space/Langchain-Chatchat/blob/master/img/langchain%2Bchatglm.png)).
+See the Langchain-Chatchat architecture below ([source](https://github.com/chatchat-space/Langchain-Chatchat/blob/master/img/langchain%2Bchatglm.png)).
 
-<img src="https://github.com/chatchat-space/Langchain-Chatchat/blob/master/img/langchain%2Bchatglm.png" height="350px">
+<img src="img/langchain%2Bchatglm.png" height="350px">
   
 ## Installation
 
