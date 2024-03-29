@@ -58,6 +58,7 @@ Currently, we support only the LLM/embedding models specified in the table below
 Run the following commands:
 ```bash
 conda activate ipex-llm-langchain-chatchat
+conda install -c conda-forge -y gperftools=2.10
 
 source /opt/intel/oneapi/setvars.sh
 
@@ -73,8 +74,7 @@ export no_proxy=localhost,127.0.0.1
 
 python startup.py -a
 ```
->[!Note]
-> Please note that `libtcmalloc.so` can be installed by `conda install -c conda-forge -y gperftools=2.10`
+
 You can find the Web UI's URL printed on the terminal logs, e.g. http://localhost:8501/.
 
 Open a browser and navigate to the URL to use the Web UI.
