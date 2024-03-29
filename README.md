@@ -25,7 +25,7 @@
 The following sections introduce how to install and run Langchain-chatchat on **Intel Core Ultra platform (MTL)**, utilizing the iGPU to run both LLMs and embedding models. 
 
 ## Table of Contents
-1. [RAG Architecture](#langchain-chatchat-architecture)
+1. [RAG Architecture](langchain-chatchat-architecture)
 2. [Installation](#installation)
 3. [One-time Warmup](#one-time-warm-up)
 4. [Start the Service](#start-the-service)
