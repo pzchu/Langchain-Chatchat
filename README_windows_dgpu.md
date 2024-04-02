@@ -2,7 +2,7 @@
 
 ### Download Langchain-Chatchat
 
-Download the Langchain-Chatchat with IPEX-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/ipex-llm.zip). Unzip the content into a directory, e.g. `C:\Langchain-Chatchat-ipex-llm`. 
+Download the Langchain-Chatchat with IPEX-LLM integrations from [this link](https://github.com/intel-analytics/Langchain-Chatchat/archive/refs/heads/ipex-llm.zip). Unzip the content into a directory, e.g. `C:\Users\arda\Downloads\Langchain-Chatchat-ipex-llm`. 
 
 ### Install Prerequisites
 
@@ -11,29 +11,25 @@ Visit the [Install IPEX-LLM on Windows with Intel GPU Guide](https://ipex-llm.re
 ### Install Python Dependencies
 
 #### 1. Create a Conda Environment
-Run the following commands in **Anaconda Prompt** to create a new python environment:
-  ```cmd
-  conda create -n ipex-llm-langchain-chatchat python=3.11
-  conda activate ipex-llm-langchain-chatchat
-  ```
+Open **Anaconda Prompt (miniconda3)**, and run the following commands to create a new python environment:
+```cmd
+conda create -n ipex-llm-langchain-chatchat python=3.11 libuv 
+conda activate ipex-llm-langchain-chatchat
+```
 
-  > [!NOTE]
-  > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install IPEX-LLM on Windows with Intel GPU Guide](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
+> [!NOTE]
+> When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install IPEX-LLM on Windows with Intel GPU](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_windows_gpu.html)
 
-#### 2.  Install `ipex-llm` 
-  ```cmd
-  pip install --pre --upgrade ipex-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
-  pip install --pre --upgrade torchaudio==2.1.0a0  -f https://developer.intel.com/ipex-whl-stable-xpu
-  ```
-#### 3. Install Langchain-Chatchat Dependencies 
-Switch to the root directory of Langchain-Chatchat you've downloaded (refer to the [download section](#download-langchain-chatchat)), and install the dependencies with the commands below. **Note: In the example commands we assume the root directory is `C:\Langchain-Chatchat-ipex-llm`. Remember to change it to your own path**).
-  ```cmd
-  cd C:\Langchain-Chatchat-ipex-llm
-  pip install -r requirements_ipex_llm.txt 
-  pip install -r requirements_api_ipex_llm.txt
-  pip install -r requirements_webui.txt
-  ```
+#### 2. Install Intel oneAPI Base Toolkit 2024.0
+```cmd
+pip install dpcpp-cpp-rt==2024.0.2 mkl-dpcpp==2024.0.0 onednn==2024.0.0
+```
 
+#### 3.  Install `ipex-llm` 
+```cmd
+pip install --pre --upgrade ipex-llm[xpu] -f https://developer.intel.com/ipex-whl-stable-xpu
+pip install --pre --upgrade torchaudio==2.1.0a0  -f https://developer.intel.com/ipex-whl-stable-xpu
+```
 ### Configuration
 -  In root directory of Langchain-Chatchat, run the following command to create a config:
     ```cmd
@@ -55,7 +51,7 @@ Currently, we support only the LLM/embedding models specified in the table below
 |`BAAI/bge-large-en-v1.5`| English Embedding|[HF](https://huggingface.co/BAAI/bge-large-en-v1.5) |
 
 ## Start the Service
-Run the following commands in **Anaconda Prompt**:
+In **Anaconda Prompt (miniconda3)**, under the root directory of Langchain-Chatchat, run the following commands:
 ```cmd
 conda activate ipex-llm-langchain-chatchat
 
@@ -70,6 +66,9 @@ set BIGDL_IMPORT_IPEX=0
 
 python startup.py -a
 ```
+
+>[!Note]
+> The above configurations lead to optimal performance for **Intel Arc™ A-Series Graphics** with the exception of Intel Arc™ A300-Series or Pro A60.
 
 You can find the Web UI's URL printed on the terminal logs, e.g. http://localhost:8501/.
 
