@@ -14,10 +14,10 @@ See the demo of running `Langchain-Chatchat` (Knowledge Base QA using RAG pipeli
   </tr>
   <tr>
     <td>
-      <video src="https://llm-assets.readthedocs.io/en/latest/_images/langchain-chatchat-en.mp4" alt="english-video">english</video>
+      <video src="https://github.com/intel-analytics/Langchain-Chatchat/assets/1995599/92bc5697-f633-4b26-b47f-1914228c659a" alt="english-video">english</video>
     </td>
     <td>
-      <video src="https://llm-assets.readthedocs.io/en/latest/_images/langchain-chatchat-cn.mp4" alt="chinese-video">chinese</video>
+      <video src="https://github.com/intel-analytics/Langchain-Chatchat/assets/1995599/709bdc4d-dff9-45fa-bd55-90879ff8a5a8" alt="chinese-video">chinese</video>
     </td>
   </tr>
 </table>
@@ -173,5 +173,3 @@ Ensure that you have installed versions of `ipex-llm>=2.1.0b20240327`. To upgrad
 #### 2. Prompt Templates
 
 In the left-side menu, you have the option to choose a prompt template. There're several pre-defined templates - those ending with '_cn' are Chinese templates, and those ending with '_en' are English templates. You can also define your own prompt templates in `configs/prompt_config.py`. Remember to restart the service to enable these changes. 
-
-
