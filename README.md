@@ -14,10 +14,10 @@ See the demo of running `Langchain-Chatchat` (Knowledge Base QA using RAG pipeli
   </tr>
   <tr>
     <td>
-      <video src="https://github.com/intel-analytics/Langchain-Chatchat/assets/1995599/92bc5697-f633-4b26-b47f-1914228c659a" alt="english-video">english</video>
+      <video src="https://llm-assets.readthedocs.io/en/latest/_images/langchain-chatchat-en.mp4" alt="english-video">english</video>
     </td>
     <td>
-      <video src="https://github.com/intel-analytics/Langchain-Chatchat/assets/1995599/709bdc4d-dff9-45fa-bd55-90879ff8a5a8" alt="chinese-video">chinese</video>
+      <video src="https://llm-assets.readthedocs.io/en/latest/_images/langchain-chatchat-cn.mp4" alt="chinese-video">chinese</video>
     </td>
   </tr>
 </table>
