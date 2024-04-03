@@ -1,3 +1,9 @@
+# Setup Guide for Windows with Intel Arc A-Series GPU
+
+1. [Installation](#installation)
+2. [One-time Warmup](#one-time-warm-up)
+3. [Start the Service](#start-the-service)
+
 ## Installation
 
 ### Download Langchain-Chatchat

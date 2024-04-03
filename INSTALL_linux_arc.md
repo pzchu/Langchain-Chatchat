@@ -1,3 +1,9 @@
+# Setup Guide for Linux with Intel Arc A-Series GPU
+
+1. [Installation](#installation)
+2. [One-time Warmup](#one-time-warm-up)
+3. [Start the Service](#start-the-service)
+
 ## Installation
 
 ### Download Langchain-Chatchat
@@ -19,6 +25,7 @@ Run the following commands to create a new python environment:
 
   > [!NOTE]
   > When creating the conda environment we used python 3.11, which is different from the default recommended python version 3.9 in [Install IPEX-LLM on Linux with Intel GPU Guide](https://ipex-llm.readthedocs.io/en/latest/doc/LLM/Quickstart/install_linux_gpu.html)
+
 
 #### 2.  Install `ipex-llm` 
   ```bash
@@ -58,23 +65,22 @@ Currently, we support only the LLM/embedding models specified in the table below
 Run the following commands:
 ```bash
 conda activate ipex-llm-langchain-chatchat
-conda install -c conda-forge -y gperftools=2.10
 
 source /opt/intel/oneapi/setvars.sh
-
-export LD_PRELOAD=${LD_PRELOAD}:${CONDA_PREFIX}/lib/libtcmalloc.so
+export USE_XETLA=OFF
 export SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=1
 export SYCL_CACHE_PERSISTENT=1
-export ENABLE_SDP_FUSION=1
-export BIGDL_LLM_XMX_DISABLED=1
 export BIGDL_QUANTIZE_KV_CACHE=1
+export BIGDL_LLM_XMX_DISABLED=1
 
+export no_proxy='localhost,127.0.0.1'
 export BIGDL_IMPORT_IPEX=0
-export no_proxy=localhost,127.0.0.1
 
 python startup.py -a
 ```
+>[!Note]
+> The above configurations lead to optimal performance for **Intel Arc™ A-Series Graphics** with the exception of Intel Arc™ A300-Series or Pro A60.
 
-You can find the Web UI's URL printed on the terminal logs, e.g. http://localhost:8501/.
+You can find the Web UI's URL printted on the terminal logs, e.g. http://localhost:8501/.
 
-Open a browser and navigate to the URL to use the Web UI.
+Open a browser and navigate to the URL to use the Web UI. 
