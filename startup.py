@@ -7,8 +7,10 @@ from multiprocessing import Process
 from datetime import datetime
 from pprint import pprint
 from langchain_core._api import deprecated
+from configs.model_config import LLM_DEVICE, EMBEDDING_DEVICE
 
-import intel_extension_for_pytorch as ipex
+if LLM_DEVICE=="xpu" or EMBEDDING_DEVICE == "xpu":
+    import intel_extension_for_pytorch as ipex
 
 try:
     import numexpr
@@ -92,6 +94,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
 
     for k, v in kwargs.items():
         setattr(args, k, v)
+
     if worker_class := kwargs.get("langchain_model"):  # Langchian支持的模型不用做操作
         from fastchat.serve.base_model_worker import app
         worker = ""
@@ -174,7 +177,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
 
         else:
             from fastchat.serve.model_worker import GptqConfig, AWQConfig, worker_id
-            if args.device in ['xpu']:
+            if args.device in ['xpu', 'cpu']:
                 from ipex_llm.serving.fastchat.ipex_llm_worker import app, BigDLLLMWorker
             else:
                 from fastchat.serve.model_worker import app, ModelWorker
@@ -220,7 +223,7 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
                 groupsize=args.awq_groupsize,
             )
 
-            if args.device in ['xpu']:
+            if args.device in ['xpu', 'cpu']:
                 worker = BigDLLLMWorker(
                     controller_addr=args.controller_address,
                     worker_addr=args.worker_address,
