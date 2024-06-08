@@ -21,6 +21,8 @@ Others were more pragmatic, recognizing that,
 print(">> NOTE: The one-time warmup may take several minutes. Please be patient until it finishes warm-up...")
 print("-"*15, " Start warming-up LLM chatglm3-6b on MTL iGPU ", "-"*15)
 model_path = Path(MODEL_ROOT_PATH) / "chatglm3-6b"
+print('#################')
+print(model_path)
 
 model = AutoModel.from_pretrained(model_path,
                                   load_in_4bit=True,
@@ -78,16 +80,18 @@ gc.collect()
 print("-"*15, " Start warming-up embedding model bge-large-zh-v1.5 on MTL iGPU ", "-"*15)
 # Refering: https://huggingface.co/BAAI/bge-large-zh-v1.5#using-huggingface-transformers
 model_path = Path(MODEL_ROOT_PATH) / "bge-large-zh-v1.5"
-
+print(model_path)
 model = AutoModel.from_pretrained(model_path,
                                   load_in_low_bit="fp16",
                                   optimize_model=True)
-    
+print('########done###########')  
 model = model.to('xpu')
 
 # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_path,
                                           trust_remote_code=True)
+
+print(tokenizer.encode('Hello, world!'))
 
 with torch.inference_mode():
     encoded_input = tokenizer([embedding_warmup_prompt],
